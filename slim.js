@@ -65,26 +65,13 @@ var $ = function(selector) {
     }
 };
 
-/*
-var Ajax = function(type, url, params) {
-    this.req = new XMLHttpRequest();
-    this.type = type;
-    this.url = url;
-    this.params = params;
-    
-    this.req.open(this.type, this.url, true);
-    this.req.onreadystatechange = function() {
-        console.log('change', this.req.readyState, this.req.status, this.req.responseText)
-    }.bind(this);
-    this.req.send(this.params);
-};
-*/
 // jacked from prototype
 Object.extend = function(destination, source) {
   for (var property in source)
     destination[property] = source[property];
   return destination;
 };
+/*
 Function.prototype.curry = function() {
     if (!arguments.length) return this;
     var __method = this;
@@ -99,6 +86,7 @@ Function.prototype.delay = function() {
     }, timeout);
 };
 Function.prototype.defer = Function.prototype.delay.curry(0.01);
+*/
 
 var Ajax = function(options) {
     this.options = {
@@ -117,21 +105,23 @@ var Ajax = function(options) {
 
 Ajax.Request = function(url, options) {
     this.options = new Ajax(options);
-    
+
     this.transport = new XMLHttpRequest();
     
     try {
         this.transport.open(this.options.method, url, this.options.asynchronous);
         
         this.transport.onreadystatechange = this.onStateChange.bind(this);
-
-        this.transport.send();
-
+        this.setRequestHeaders();
+        
+        this.body = this.method == 'post' ? (this.options.postBody || params) : null;
+        this.transport.send(this.body);
     } catch(e) {
-        console.error(e)
+        console.error('request error', e)
     }
     
 };
+Ajax.Request.Events = ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success'];
 
 Ajax.Request.prototype.onStateChange = function() {
     var readyState = this.transport.readyState;
@@ -142,5 +132,43 @@ Ajax.Request.prototype.onStateChange = function() {
 
 Ajax.Request.prototype.respondToReadyState = function(state) {
     this._complete = (state === 4) ? true : false;
-    //console.log(state, this.transport.status, this.transport.responseText, this._complete)
+
+    if(this._complete) {
+        try {
+            (
+                this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] ||
+                //this.options['on'+Ajax.Request.Events[state]] || 
+                function() {}
+            )();
+        } catch(e) {
+            console.error('readystate error', e)
+        }
+    }
+    
+    try {
+        (this.options['on'+Ajax.Request.Events[state]] || function() {})();
+    } catch(e) {
+        console.error('readystate error', e)
+    }
+    
+};
+
+Ajax.Request.prototype.getSuccessCode = function() {
+    var successCode = (!this.transport.status) ? 5 : (this.transport.status >= 200 && this.transport.status < 300) ? 6 : 5;
+    return successCode;
+};
+
+Ajax.Request.prototype.setRequestHeaders = function() {
+    var headers = {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
+    };
+    
+    if(this.options.method == 'post') {
+        headers['Content-type'] = this.options.contentType+(this.options.encoding ? '; charset='+this.options.encoding : '');
+    }
+    
+    for(var name in headers) {
+        this.transport.setRequestHeader(name, headers[name]);
+    }
 };
