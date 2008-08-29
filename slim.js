@@ -138,15 +138,14 @@ Ajax.Request.prototype.respondToReadyState = function(state) {
             (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(new Ajax.Response(this.transport));
                 //this.options['on'+Ajax.Request.Events[state]] || 
         } catch(e) {
-            console.error('readystate error', e)
+            console.error('readystate error type 1', e)
         }
     }
     
-console.log(state)
     try {
         (this.options['on'+Ajax.Request.Events[state]] || function() {})(new Ajax.Response(this.transport));
     } catch(e) {
-        console.error('readystate error', e)
+        console.error('readystate error type 2', e)
     }
     
 };
@@ -172,12 +171,15 @@ Ajax.Request.prototype.setRequestHeaders = function() {
 };
 
 Ajax.Response = function(response) {
-	this.response = {
-		responseText: response.responseText,
-		responseXML: response.responseXML,
-		responseJSON: eval('('+response.responseText+')')
-	};
-	
-	return this.response;
+    if(response.readyState > 2) {
+    	this.response = {
+    		responseText: response.responseText,
+    		//responseXML: response.responseXML,
+    		responseJSON: eval('('+response.responseText+')')[0],
+    		responseObject: eval('('+response.responseText+')')
+    	};
+
+    	return this.response;
+    }
 };
 
