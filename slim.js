@@ -135,18 +135,16 @@ Ajax.Request.prototype.respondToReadyState = function(state) {
 
     if(this._complete) {
         try {
-            (
-                this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] ||
+            (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(new Ajax.Response(this.transport));
                 //this.options['on'+Ajax.Request.Events[state]] || 
-                function() {}
-            )();
         } catch(e) {
             console.error('readystate error', e)
         }
     }
     
+console.log(state)
     try {
-        (this.options['on'+Ajax.Request.Events[state]] || function() {})();
+        (this.options['on'+Ajax.Request.Events[state]] || function() {})(new Ajax.Response(this.transport));
     } catch(e) {
         console.error('readystate error', e)
     }
@@ -172,3 +170,14 @@ Ajax.Request.prototype.setRequestHeaders = function() {
         this.transport.setRequestHeader(name, headers[name]);
     }
 };
+
+Ajax.Response = function(response) {
+	this.response = {
+		responseText: response.responseText,
+		responseXML: response.responseXML,
+		responseJSON: eval('('+response.responseText+')')
+	};
+	
+	return this.response;
+};
+

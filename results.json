@@ -1,4 +1,4 @@
-{
-    awesome: 'you know it',
-    paul: 'rocks'
-}
+[{
+    'awesome': 'you know it',
+    'paul': 'rocks'
+}]
