@@ -71,6 +71,26 @@ Object.extend = function(destination, source) {
     destination[property] = source[property];
   return destination;
 };
+
+
+return this.map(function(pair) {
+  var key = encodeURIComponent(pair.key), values = pair.value;
+
+  if (values && typeof values == 'object') {
+    if (Object.isArray(values))
+      return values.map(toQueryPair.curry(key)).join('&');
+  }
+  return toQueryPair(key, values);
+}).join('&');
+
+
+Object.prototype.toQueryString = function() {
+    var str = '';
+    for(key in this) {
+        str += encodeURIComponent(key)+'='encodeURIComponent(this[key])+'&';
+    }
+    return str;
+};
 /*
 Function.prototype.curry = function() {
     if (!arguments.length) return this;
@@ -110,6 +130,10 @@ Ajax.Request = function(url, options) {
 
     this.transport = new XMLHttpRequest();
     
+    if(this.options.method.toLowerCase() == 'get') {
+        url += (this.url.indexOf('?') >= 0) ? '&' : '?' + params;
+    }
+    
     try {
         this.transport.open(this.options.method, url, this.options.asynchronous);
 
@@ -118,7 +142,7 @@ Ajax.Request = function(url, options) {
         this.transport.onreadystatechange = this.onStateChange.bind(this);
         this.setRequestHeaders();
         
-        this.body = this.method == 'post' ? (this.options.postBody || params) : null;
+        this.body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
         this.transport.send(this.body);
     } catch(e) {
         console.error('request error', e)
@@ -136,30 +160,29 @@ Ajax.Request.prototype.onStateChange = function() {
 
 Ajax.Request.prototype.respondToReadyState = function(state) {
     this._complete = (state === 4) ? true : false;
+	
+	if(this._complete) {
+    	var response = new Ajax.Response(this.transport, this.options.format, this.options.sanitizeJSON)
 
-	console.log(state, Ajax.Request.Events[state])
-
-	// if onEvent function is available for this state
-    try {
-		if(this._complete) {
-	        (this.options['on'+Ajax.Request.Events[state]] || function() {})(new Ajax.Response(this.transport, this.options.format, this.options.sanitizeJSON));
-		} else {
-			(this.options['on'+Ajax.Request.Events[state]] || function() {})();
-		}
-    } catch(e) {
-        // fail silently
-		//console.error('readystate error type 1', e)
-    }
-    
-	// if complete, check for onFailure or onSuccess and fire function if available
-    if(this._complete) {
-        try {
-            (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(new Ajax.Response(this.transport, this.options.format, this.options.sanitizeJSON));
-        } catch(e) {
-            console.error('readystate error type 2', e)
+    	// if complete, check for onFailure or onSuccess and fire function if available
+        if(this.options.onFailure || this.options.onSuccess) {
+            try {
+                (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(response);
+            } catch(e) { /* fail silently */ }
         }
-    }
-    
+
+    	// if onEvent function is available for this state
+        try {
+    	    (this.options['on'+Ajax.Request.Events[state]] || function() {})(response);
+        } catch(e) { /* fail silently */ }
+        
+        // kill that object. we don't need it.
+        delete response;
+	} else {
+	    try {
+			(this.options['on'+Ajax.Request.Events[state]] || function() {})();
+	    } catch(e) { /* fail silently */ }
+	}
 };
 
 Ajax.Request.prototype.getSuccessCode = function() {
@@ -186,14 +209,19 @@ Ajax.Response = function(response, format, sanitize) {
 	this.response = response;
 	this.format = format;
 	this.sanitizeJSON = sanitize;
-
-	return this.getResponse();
+    
+    try {
+    	return this.getResponse();
+    } catch(e) {
+        return null;
+    }
 };
 
 Ajax.Response.prototype.getResponse = function() {
 	switch(this.format.toLowerCase()) {
 		case 'xml':
-			return this.response.responseXML;
+		    var xml = (this.response.responseXML) ? this.response.responseXML : new String('');
+			return xml;
 		break;
 		case 'json':
 			return this.evalJSON();
