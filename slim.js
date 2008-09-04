@@ -73,24 +73,34 @@ Object.extend = function(destination, source) {
 };
 
 
-return this.map(function(pair) {
-  var key = encodeURIComponent(pair.key), values = pair.value;
+//return this.map(function(pair) {
+//  var key = encodeURIComponent(pair.key), values = pair.value;
+//
+//  if (values && typeof values == 'object') {
+//    if (Object.isArray(values))
+//      return values.map(toQueryPair.curry(key)).join('&');
+//  }
+//  return toQueryPair(key, values);
+//}).join('&');
 
-  if (values && typeof values == 'object') {
-    if (Object.isArray(values))
-      return values.map(toQueryPair.curry(key)).join('&');
-  }
-  return toQueryPair(key, values);
-}).join('&');
-
+Object.prototype.isArray = function(object) {
+    return (object != null && typeof object == "object" && 'splice' in object && 'join' in object);
+};
 
 Object.prototype.toQueryString = function() {
-    var str = '';
+    var params = []
     for(key in this) {
-        str += encodeURIComponent(key)+'='encodeURIComponent(this[key])+'&';
+        var str = '';
+        if(typeof this[key] != 'function') {
+            str = encodeURIComponent(key)+'=';
+            var value = (Object.isArray(this[key])) ? this[key].join(',') : this[key];
+            str += encodeURIComponent(value);
+            params.push(str)
+        }
     }
-    return str;
+    return params.join('&');
 };
+
 /*
 Function.prototype.curry = function() {
     if (!arguments.length) return this;
@@ -114,8 +124,8 @@ var Ajax = function(options) {
         asynchronous: true,
         contentType: 'application/x-www-form-urlencoded',
         encoding: 'UTF-8',
-        params: '',
-		format: 'object',
+        params: {},
+		format: '',
 		sanitizeJSON: false
     };
     
@@ -136,11 +146,11 @@ Ajax.Request = function(url, options) {
     
     try {
         this.transport.open(this.options.method, url, this.options.asynchronous);
-
-		console.log(this)
         
         this.transport.onreadystatechange = this.onStateChange.bind(this);
         this.setRequestHeaders();
+        
+        var params = this.options.params.toQueryString();
         
         this.body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
         this.transport.send(this.body);
@@ -198,10 +208,18 @@ Ajax.Request.prototype.setRequestHeaders = function() {
     
     if(this.options.method == 'post') {
         headers['Content-type'] = this.options.contentType+(this.options.encoding ? '; charset='+this.options.encoding : '');
+        headers['Content-length'] = this.options.params.length;
+        /* Force "Connection: close" for older Mozilla browsers to work
+         * around a bug where XMLHttpRequest sends an incorrect
+         * Content-length header. See Mozilla Bugzilla #246651.
+         */
+        //headers['Connection'] = 'close';
     }
     
     for(var name in headers) {
-        this.transport.setRequestHeader(name, headers[name]);
+        if(typeof headers[name] != 'function') {
+            this.transport.setRequestHeader(name, headers[name]);
+        }
     }
 };
 
@@ -229,8 +247,11 @@ Ajax.Response.prototype.getResponse = function() {
 		case 'object':
 			return eval('('+this.response.responseText+')');
 		break;
+		case 'text':
+		    return this.response.responseText;
+		break
 		default: 
-			return this.response.responseText;
+			return this.response;
 		break;
 	}
 };
