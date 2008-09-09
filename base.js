@@ -145,8 +145,8 @@ Object.extend(Ajax, {
     //      @param onRequested      {Function}      Ready state callback.
     //      @param onProcessing     {Function}      Ready state callback.
     //      @param onComplete       {Function}      Ready state callback. Includes response object.
-    //      @param onFailure        {Function}      Ready state callback. Includes response object.
-    //      @param onSuccess        {Function}      Ready state callback. Includes response object.
+    //      @param onFailure        {Function}      Ready state callback. Includes response object. (recommended)
+    //      @param onSuccess        {Function}      Ready state callback. Includes response object. (recommended)
     //
     Request: function(url, options) {
         this.options = new Ajax(options);
@@ -287,6 +287,8 @@ var Element = function(type, atts) {
 
 //
 // Create our magic query selector. Load in Sizzle if necessary.
+// $(selector) returns a NodeList
+// @param selector  {string}        CSS query of selectors
 //
 (function() {
     // make any failed console calls silent
