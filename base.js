@@ -1,16 +1,3 @@
-// super simple CSS selector. select only by ID or single class name
-var $ = function(selector) {
-    if(typeof document.querySelectorAll !== 'function') {
-        return document.querySelectorAll(selector);
-    } else {
-        if(selector.indexOf('#') == 0) {
-            return [document.getElementById(selector.replace('#', ''))];
-        } else if(selector.indexOf('.') == 0) {
-            return document.getElementsByClassName(selector.replace(/\./, ''));
-        }
-    }
-};
-
 Object.extend = function(destination, source) {
   for(var property in source) {
       destination[property] = source[property];
@@ -79,11 +66,12 @@ var Ajax = function(options) {
 
 Ajax.Request = function(url, options) {
     this.options = new Ajax(options);
+    this.url = url;
 
     this.transport = new XMLHttpRequest();
     
     if(this.options.method.toLowerCase() == 'get') {
-        url += (this.url.indexOf('?') >= 0) ? '&' : '?' + params;
+        this.url += (this.url.indexOf('?') >= 0) ? '&' : '?' + params;
     }
     
     try {
@@ -115,26 +103,17 @@ Ajax.Request.addMethods({
         this._complete = (state === 4) ? true : false;
 
     	if(this._complete) {
-        	var response = new Ajax.Response(this.transport, this.options.format, this.options.sanitizeJSON)
+        	var res = (new Ajax.Response(this.transport, this.options.format, this.options.sanitizeJSON)).getResponse();
 
         	// if complete, check for onFailure or onSuccess and fire function if available
             if(this.options.onFailure || this.options.onSuccess) {
-                try {
-                    (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(response);
-                } catch(e) { /* fail silently */ }
+                (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(res);
             }
 
         	// if onEvent function is available for this state
-            try {
-        	    (this.options['on'+Ajax.Request.Events[state]] || function() {})(response);
-            } catch(e) { /* fail silently */ }
-
-            // kill that object. we don't need it.
-            delete response;
+        	(this.options['on'+Ajax.Request.Events[state]] || function() {})(res);
     	} else {
-    	    try {
-    			(this.options['on'+Ajax.Request.Events[state]] || function() {})();
-    	    } catch(e) { /* fail silently */ }
+    		(this.options['on'+Ajax.Request.Events[state]] || function() {})();
     	}
     },
     getSuccessCode: function() {
@@ -149,12 +128,6 @@ Ajax.Request.addMethods({
 
         if(this.options.method == 'post') {
             headers['Content-type'] = this.options.contentType+(this.options.encoding ? '; charset='+this.options.encoding : '');
-            /* Force "Connection: close" for older Mozilla browsers to work
-             * around a bug where XMLHttpRequest sends an incorrect
-             * Content-length header. See Mozilla Bugzilla #246651.
-             */
-            //headers['Content-length'] = this.options.params.length;
-            //headers['Connection'] = 'close';
         }
 
         for(var name in headers) {
@@ -169,12 +142,6 @@ Ajax.Response = function(response, format, sanitize) {
 	this.response = response;
 	this.format = format;
 	this.sanitizeJSON = sanitize;
-
-    try {
-    	return this.getResponse();
-    } catch(e) {
-        return null;
-    }
 };
 Ajax.Response.addMethods({
     getResponse: function() {
@@ -192,9 +159,6 @@ Ajax.Response.addMethods({
     		case 'text':
     		    return this.response.responseText;
     		break
-    		default: 
-    			return this.response;
-    		break;
     	}
     },
     isJSON: function() {
@@ -219,9 +183,33 @@ var Element = function(type, atts) {
     this.el = document.createElement(type);
 
     for(attr in atts) {
-        this.el.setAttribute(attr, atts[attr]);
+        if(typeof this.el[attr] !== 'function') {
+            this.el.setAttribute(attr, atts[attr]);
+        }
     }
     
     return this.el;
 };
 
+// Create our magic query selector. Load in Sizzle if necessary.
+(function() {
+    if(typeof document.querySelectorAll === 'function') {
+        window.$ = function(selector) {
+            return document.querySelectorAll(selector);
+        }
+    } else {
+        console.warn('Falling back on Sizzle query selector.');
+        new Ajax.Request('sizzle.js', {
+            method: 'get',
+            format: 'text',
+            onSuccess: function(o) {
+                sizzleScript = new Element('script', { type: 'text/css' });
+                eval(o);
+                // $(selector) is now available
+            },
+            onFailure: function(o) {
+                console.error('horrible failure getting sizzle')
+            }
+        });
+    }
+})();
