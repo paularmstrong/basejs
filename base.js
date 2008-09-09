@@ -28,6 +28,14 @@ Object.addMethods({
             }
         }
         return params.join('&');
+    },
+    each: function(iterator, context) {
+        iterator = iterator.bind(context);
+        try {
+            var c = this.length, i = 0;
+            while(i<c) { iterator(this[i]); i++ }
+        } catch(e) { throw e; }
+        return this;
     }
 });
 
@@ -91,7 +99,6 @@ Ajax.Request = function(url, options) {
 Object.extend(Ajax.Request, {
     Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
 });
-
 Ajax.Request.addMethods({
     onStateChange: function() {
         var readyState = this.transport.readyState;
