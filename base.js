@@ -71,31 +71,38 @@ var Ajax = function(options) {
     
     return this.options;
 };
+Object.extend(Ajax, {
+    Request: function(url, options) {
+        this.options = new Ajax(options);
+        this.url = url;
 
-Ajax.Request = function(url, options) {
-    this.options = new Ajax(options);
-    this.url = url;
+        this.transport = new XMLHttpRequest();
 
-    this.transport = new XMLHttpRequest();
-    
-    if(this.options.method.toLowerCase() == 'get') {
-        this.url += (this.url.indexOf('?') >= 0) ? '&' : '?' + params;
+        if(this.options.method.toLowerCase() == 'get') {
+            this.url += (this.url.indexOf('?') >= 0) ? '&' : '?' + params;
+        }
+
+        try {
+            this.transport.open(this.options.method, url, this.options.asynchronous);
+
+            this.transport.onreadystatechange = this.onStateChange.bind(this);
+            this.setRequestHeaders();
+
+            var params = this.options.params.toQueryString();
+
+            this.body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
+            this.transport.send(this.body);
+        } catch(e) {
+            console.error('request error', e)
+        }
+    },
+    Response: function(response, format, sanitize) {
+    	this.response = response;
+    	this.format = format;
+    	this.sanitizeJSON = sanitize;
     }
-    
-    try {
-        this.transport.open(this.options.method, url, this.options.asynchronous);
-        
-        this.transport.onreadystatechange = this.onStateChange.bind(this);
-        this.setRequestHeaders();
-        
-        var params = this.options.params.toQueryString();
-        
-        this.body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
-        this.transport.send(this.body);
-    } catch(e) {
-        console.error('request error', e)
-    }
-};
+});
+
 Object.extend(Ajax.Request, {
     Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
 });
@@ -144,12 +151,6 @@ Ajax.Request.addMethods({
         }
     }
 });
-
-Ajax.Response = function(response, format, sanitize) {
-	this.response = response;
-	this.format = format;
-	this.sanitizeJSON = sanitize;
-};
 Ajax.Response.addMethods({
     getResponse: function() {
     	switch(this.format.toLowerCase()) {
