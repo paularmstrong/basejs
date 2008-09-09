@@ -13,9 +13,15 @@ Object.prototype.addMethods = function(methods) {
 };
 
 Object.addMethods({
+    //
+    // Check if the object is an array instance.
+    //
     isArray: function(object) {
         return (object != null && typeof object == "object" && 'splice' in object && 'join' in object);
     },
+    // 
+    // Generate a URL-safe query string from the object.
+    //
     toQueryString: function() {
         var params = []
         for(key in this) {
@@ -29,6 +35,11 @@ Object.addMethods({
         }
         return params.join('&');
     },
+    //
+    // Iterate each key in the object
+    // @param iterator      {Function}      Function to run on each object key
+    // @param context       {Object}        Scope override (optional)
+    //
     each: function(iterator, context) {
         iterator = iterator.bind(context);
         try {
@@ -36,16 +47,53 @@ Object.addMethods({
             while(i<c) { iterator(this[i]); i++ }
         } catch(e) { throw e; }
         return this;
+    },
+    //
+    // iterate each key in the object after specified interval
+    // @param iterator      {Function}      Function to run on each object key
+    // @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
+    // @param context       {Object}        Scope override (optional)
+    //
+    eachAfter: function(iterator, interval, context) {
+        iterator = iterator.bind(context);
+        var c = this.length, i = 0;
+        try {
+            var eachIterator = setInterval(function() {
+                if(i === c) { clearInterval(eachIterator); } else {
+                    iterator(this[i]);
+                    i++;
+                }
+            }.bind(this), (interval || 1000));
+        } catch(e) { throw e; }
+        return this;
+    },
+    //
+    // Create and fire custom events
+    // @param eventName     {string}        Name of the event
+    // @param memo          {Object}        Memo parameters for the event (optional)
+    //
+    fire: function(eventName, memo) {
+        var event = document.createEvent('HTMLEvents');
+        event.initEvent(eventName, true, true);
+        event.memo = memo || {};
+        
+        this.dispatchEvent(event);
     }
 });
 
 Function.addMethods({
+    //
+    // Override scope of a callback function on an event.
+    //
     bindAsEventListener: function() {
         var __method = this, object = arguments[0];
         return function(event) {
             return __method.apply(object, [event || window.event].concat(arguments));
         }
     },
+    //
+    // Override scope of a function.
+    //
     bind: function() {
         if (arguments.length < 2 && !arguments[0]) return this;
         var __method = this,  object = arguments[0];
@@ -198,20 +246,29 @@ var Element = function(type, atts) {
     return this.el;
 };
 
+//
 // Create our magic query selector. Load in Sizzle if necessary.
+//
 (function() {
+    // make any failed console calls silent
+    if(typeof console !== 'object') {
+        console = { 
+            log: function() {}, alert: function() {}, warn: function() {}, info: function() {},
+            time: function() {}, timeEnd: function() {}, error: function() {}
+        };
+    }
     if(typeof document.querySelectorAll === 'function') {
         window.$ = function(selector) {
             return document.querySelectorAll(selector);
         }
     } else {
         // note that at this time, Sizzle is not Internet Explorer compatible
-        console.warn('Falling back on Sizzle query selector.');
+        console.warn('Selectors API not implemented in this browser. Falling back on Sizzle query selector.');
         new Ajax.Request('sizzle.min.js', {
             method: 'get',
             format: 'text',
             onSuccess: function(o) {
-                eval(o); // FF3 < 50ms, Safari3 < 5ms
+                eval(o); // FF2,FF3 < 10ms, Safari3 < 4ms
                 // $(selector) is now available
             },
             onFailure: function(o) {
