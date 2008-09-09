@@ -187,7 +187,6 @@ var Element = function(type, atts) {
             this.el.setAttribute(attr, atts[attr]);
         }
     }
-    
     return this.el;
 };
 
@@ -198,13 +197,13 @@ var Element = function(type, atts) {
             return document.querySelectorAll(selector);
         }
     } else {
+        // note that at this time, Sizzle is not Internet Explorer compatible
         console.warn('Falling back on Sizzle query selector.');
-        new Ajax.Request('sizzle.js', {
+        new Ajax.Request('sizzle.min.js', {
             method: 'get',
             format: 'text',
             onSuccess: function(o) {
-                sizzleScript = new Element('script', { type: 'text/css' });
-                eval(o);
+                eval(o); // FF3 < 50ms, Safari3 < 5ms
                 // $(selector) is now available
             },
             onFailure: function(o) {
