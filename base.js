@@ -1,3 +1,8 @@
+//
+// Add properties to an object
+// @param destination   {Object}        The object to add the property to.
+// @param source        {Object}        Object of keys and values to add to the destination.
+//
 Object.extend = function(destination, source) {
   for(var property in source) {
       destination[property] = source[property];
@@ -5,6 +10,10 @@ Object.extend = function(destination, source) {
   return destination;
 };
 
+//
+// Helper to add methods to an Object. Just makes code easier on the eyes.
+// @param methods       {Object}        
+//
 Object.prototype.addMethods = function(methods) {
     for(var method in methods) {
         this.prototype[method] = methods[method];
@@ -110,7 +119,7 @@ var Ajax = function(options) {
         contentType: 'application/x-www-form-urlencoded',
         encoding: 'UTF-8',
         params: {},
-		format: '',
+		format: 'text',
 		sanitizeJSON: false
     };
     
@@ -120,6 +129,25 @@ var Ajax = function(options) {
     return this.options;
 };
 Object.extend(Ajax, {
+    //
+    // Ajax.Request makes a new XHR object request
+    // @param url           {string}        location to access
+    // @param options       {Object}        (optional)
+    //      @param method           {string}        post or get form method
+    //      @param asynchronous     {Boolean}       Only true supported at this time.
+    //      @param contentType      {string}        Content mime type to send.
+    //      @param encoding         {string}        Content encoding.
+    //      @param params           {Object}        Object of header parameters to send with the request.
+    //      @param format           {Object}        Response type assumption: 'text', 'json', 'object', 'xml'
+    //      @param sanitizeJSON     {Boolean}       Whether the JSON needs to be sanitized.
+    //      @param onUninitialized  {Function}      Ready state callback.
+    //      @param onConnected      {Function}      Ready state callback.
+    //      @param onRequested      {Function}      Ready state callback.
+    //      @param onProcessing     {Function}      Ready state callback.
+    //      @param onComplete       {Function}      Ready state callback. Includes response object.
+    //      @param onFailure        {Function}      Ready state callback. Includes response object.
+    //      @param onSuccess        {Function}      Ready state callback. Includes response object.
+    //
     Request: function(url, options) {
         this.options = new Ajax(options);
         this.url = url;
@@ -144,6 +172,12 @@ Object.extend(Ajax, {
             console.error('request error', e)
         }
     },
+    //
+    // Ajax.Response filters through an Ajax.Request response object to give most concise information possible.
+    // @param response      {Object}        The XMLHttpRequest object.
+    // @param format        {string}        Type to respond with: 'text', 'json', 'object', 'xml'
+    // @param sanitize      {Boolean}       Whether the JSON needs to be sanitized.
+    //
     Response: function(response, format, sanitize) {
     	this.response = response;
     	this.format = format;
@@ -235,6 +269,11 @@ Ajax.Response.addMethods({
     }
 });
 
+//
+// Simplified element creation function
+// @param type      {string}        The type of element to create.
+// @param atts      {Object}        Attributes to attached to the HTMLElement.
+//
 var Element = function(type, atts) {
     this.el = document.createElement(type);
 
