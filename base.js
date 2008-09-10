@@ -81,11 +81,11 @@ Object.addMethods({
      * @param eventName     {string}        Name of the event
      * @param memo          {Object}        Memo parameters for the event (optional)
      */
-     fire: function(eventName, memo) {
+    fire: function(eventName, memo) {
         var event = document.createEvent('HTMLEvents');
         event.initEvent(eventName, true, true);
         event.memo = memo || {};
-        
+     
         this.dispatchEvent(event);
     }
 });
