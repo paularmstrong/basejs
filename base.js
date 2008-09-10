@@ -1,8 +1,8 @@
-//
-// Add properties to an object
-// @param destination   {Object}        The object to add the property to.
-// @param source        {Object}        Object of keys and values to add to the destination.
-//
+/**
+ * Add properties to an object
+ * @param destination   {Object}        The object to add the property to.
+ * @param source        {Object}        Object of keys and values to add to the destination.
+ */
 Object.extend = function(destination, source) {
     for(var property in source) {
         destination[property] = source[property];
@@ -10,10 +10,10 @@ Object.extend = function(destination, source) {
     return destination;
 };
 
-//
-// Helper to add methods to an Object. Just makes code easier on the eyes.
-// @param methods       {Object}        
-//
+/**
+ * Helper to add methods to an Object. Just makes code easier on the eyes.
+ * @param methods       {Object}        
+ */
 Object.prototype.addMethods = function(methods) {
     for(var method in methods) {
         this.prototype[method] = methods[method];
@@ -22,15 +22,15 @@ Object.prototype.addMethods = function(methods) {
 };
 
 Object.addMethods({
-    //
-    // Check if the object is an array instance.
-    //
+    /**
+     * Check if the object is an array instance.
+     */
     isArray: function(object) {
         return (object != null && typeof object == "object" && 'splice' in object && 'join' in object);
     },
-    // 
-    // Generate a URL-safe query string from the object.
-    //
+    /**
+     * Generate a URL-safe query string from the object.
+     */
     toQueryString: function() {
         var params = [];
         this.each(function(key) {
@@ -44,11 +44,11 @@ Object.addMethods({
         }, this);
         return params.join('&');
     },
-    //
-    // Iterate each key in the object
-    // @param iterator      {Function}      Function to run on each object key
-    // @param context       {Object}        Scope override (optional)
-    //
+    /**
+     * Iterate each key in the object
+     * @param iterator      {Function}      Function to run on each object key
+     * @param context       {Object}        Scope override (optional)
+     */
     each: function(iterator, context) {
         iterator = iterator.bind(context);
         try {
@@ -57,12 +57,12 @@ Object.addMethods({
         } catch(e) { throw e; }
         return this;
     },
-    //
-    // iterate each key in the object after specified interval
-    // @param iterator      {Function}      Function to run on each object key
-    // @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
-    // @param context       {Object}        Scope override (optional)
-    //
+    /**
+     * iterate each key in the object after specified interval
+     * @param iterator      {Function}      Function to run on each object key
+     * @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
+     * @param context       {Object}        Scope override (optional)
+     */
     eachAfter: function(iterator, interval, context) {
         iterator = iterator.bind(context);
         var c = this.length, i = 0;
@@ -76,12 +76,12 @@ Object.addMethods({
         } catch(e) { throw e; }
         return this;
     },
-    //
-    // Create and fire custom events
-    // @param eventName     {string}        Name of the event
-    // @param memo          {Object}        Memo parameters for the event (optional)
-    //
-    fire: function(eventName, memo) {
+    /**
+     * Create and fire custom events
+     * @param eventName     {string}        Name of the event
+     * @param memo          {Object}        Memo parameters for the event (optional)
+     */
+     fire: function(eventName, memo) {
         var event = document.createEvent('HTMLEvents');
         event.initEvent(eventName, true, true);
         event.memo = memo || {};
@@ -91,18 +91,18 @@ Object.addMethods({
 });
 
 Function.addMethods({
-    //
-    // Override scope of a callback function on an event.
-    //
+    /**
+     * Override scope of a callback function on an event.
+     */
     bindAsEventListener: function() {
         var __method = this, object = arguments[0];
         return function(event) {
             return __method.apply(object, [event || window.event].concat(arguments));
         }
     },
-    //
-    // Override scope of a function.
-    //
+    /**
+     * Override scope of a function.
+     */
     bind: function() {
         if (arguments.length < 2 && !arguments[0]) return this;
         var __method = this,  object = arguments[0];
@@ -129,25 +129,25 @@ var Ajax = function(options) {
     return this.options;
 };
 Object.extend(Ajax, {
-    //
-    // Ajax.Request makes a new XHR object request
-    // @param url           {string}        location to access
-    // @param options       {Object}        (optional)
-    //      @param method           {string}        post or get form method
-    //      @param asynchronous     {Boolean}       Only true supported at this time.
-    //      @param contentType      {string}        Content mime type to send.
-    //      @param encoding         {string}        Content encoding.
-    //      @param params           {Object}        Object of header parameters to send with the request.
-    //      @param format           {Object}        Response type assumption: 'text', 'json', 'object', 'xml'
-    //      @param sanitizeJSON     {Boolean}       Whether the JSON needs to be sanitized.
-    //      @param onUninitialized  {Function}      Ready state callback.
-    //      @param onConnected      {Function}      Ready state callback.
-    //      @param onRequested      {Function}      Ready state callback.
-    //      @param onProcessing     {Function}      Ready state callback.
-    //      @param onComplete       {Function}      Ready state callback. Includes response object.
-    //      @param onFailure        {Function}      Ready state callback. Includes response object. (recommended)
-    //      @param onSuccess        {Function}      Ready state callback. Includes response object. (recommended)
-    //
+    /**
+     * Ajax.Request makes a new XHR object request
+     * @param url           {string}        location to access
+     * @param options       {Object}        (optional)
+     *      @param method           {string}        post or get form method
+     *      @param asynchronous     {Boolean}       Only true supported at this time.
+     *      @param contentType      {string}        Content mime type to send.
+     *      @param encoding         {string}        Content encoding.
+     *      @param params           {Object}        Object of header parameters to send with the request.
+     *      @param format           {Object}        Response type assumption: 'text', 'json', 'object', 'xml'
+     *      @param sanitizeJSON     {Boolean}       Whether the JSON needs to be sanitized.
+     *      @param onUninitialized  {Function}      Ready state callback.
+     *      @param onConnected      {Function}      Ready state callback.
+     *      @param onRequested      {Function}      Ready state callback.
+     *      @param onProcessing     {Function}      Ready state callback.
+     *      @param onComplete       {Function}      Ready state callback. Includes response object.
+     *      @param onFailure        {Function}      Ready state callback. Includes response object. (recommended)
+     *      @param onSuccess        {Function}      Ready state callback. Includes response object. (recommended)
+     */
     Request: function(url, options) {
         this.options = new Ajax(options);
         this.url = url;
@@ -172,12 +172,12 @@ Object.extend(Ajax, {
             console.error('request error', e)
         }
     },
-    //
-    // Ajax.Response filters through an Ajax.Request response object to give most concise information possible.
-    // @param response      {Object}        The XMLHttpRequest object.
-    // @param format        {string}        Type to respond with: 'text', 'json', 'object', 'xml'
-    // @param sanitize      {Boolean}       Whether the JSON needs to be sanitized.
-    //
+    /**
+     * Ajax.Response filters through an Ajax.Request response object to give most concise information possible.
+     * @param response      {Object}        The XMLHttpRequest object.
+     * @param format        {string}        Type to respond with: 'text', 'json', 'object', 'xml'
+     * @param sanitize      {Boolean}       Whether the JSON needs to be sanitized.
+     */
     Response: function(response, format, sanitize) {
     	this.response = response;
     	this.format = format;
@@ -269,11 +269,11 @@ Ajax.Response.addMethods({
     }
 });
 
-//
-// Simplified element creation function
-// @param type      {string}        The type of element to create.
-// @param atts      {Object}        Attributes to attached to the HTMLElement.
-//
+/**
+ * Simplified element creation function
+ * @param type      {string}        The type of element to create.
+ * @param atts      {Object}        Attributes to attached to the HTMLElement.
+ */
 var Element = function(type, atts) {
     this.el = document.createElement(type);
 
@@ -286,9 +286,9 @@ var Element = function(type, atts) {
 };
 
 String.addMethods({
-    //
-    // trim trailing whitespace from a string
-    //
+    /**
+     * trim trailing whitespace from a string
+     */
     trim: function() {
         var re = new RegExp(/\s+?/);
         return this.replace(re, '');
@@ -296,28 +296,28 @@ String.addMethods({
 });
 
 HTMLElement.addMethods({
-    //
-    // Add a className to an element
-    // @param className     {string}        Name of the class to add.
-    //
+    /**
+     * Add a className to an element
+     * @param className     {string}        Name of the class to add.
+     */
     addClass: function(className) {
         if(!this.hasClass(className)) {
             this.className += ' '+className.trim();
         }
         return this;
     },
-    //
-    // Check if element has a given class name
-    // @param className     {string}        Name of the class to test against.
-    //
+    /**
+     * Check if element has a given class name
+     * @param className     {string}        Name of the class to test against.
+     */
     hasClass: function(className) {
         var re = new RegExp('(?:^|\\s+)'+className+'(?:\\s+|$)');
         return re.test(this.className);
     },
-    //
-    // Remove a className from an element
-    // @param className     {string}        Name of the class to remove.
-    //
+    /**
+     * Remove a className from an element
+     * @param className     {string}        Name of the class to remove.
+     */
     removeClass: function(className) {
         if(this.hasClass(className)) {
             var re = new RegExp('(?:^|\\s+)'+className+'(?:\\s+|$)');
@@ -330,10 +330,10 @@ HTMLElement.addMethods({
         }
         return this;
     },
-    //
-    // toggle a className on an element
-    // @param className     {string}        Name of the class to remove.
-    //
+    /**
+     * toggle a className on an element
+     * @param className     {string}        Name of the class to remove.
+     */
     toggleClass: function(className) {
         if(this.hasClass(className)) {
             this.removeClass(className);
@@ -342,11 +342,11 @@ HTMLElement.addMethods({
         }
     }
 });
-//
-// Create our magic query selector. Load in Sizzle if necessary.
-// $(selector) returns a NodeList
-// @param selector  {string}        CSS query of selectors
-//
+/**
+ * Create our magic query selector. Load in Sizzle if necessary.
+ * $(selector) returns a NodeList
+ * @param selector  {string}        CSS query of selectors
+ */
 (function() {
     // make any failed console calls silent
     if(typeof console !== 'object') {
@@ -366,7 +366,7 @@ HTMLElement.addMethods({
             method: 'get',
             format: 'text',
             onSuccess: function(o) {
-                eval(o); // FF2,FF3 < 10ms, Safari3 < 4ms
+                eval(o); // FF2,FF3 < 10ms
                 // $(selector) is now available
             },
             onFailure: function(o) {
