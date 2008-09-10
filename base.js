@@ -331,7 +331,7 @@ HTMLElement.addMethods({
         return this;
     },
     /**
-     * toggle a className on an element
+     * Toggle a className on an element
      * @param className     {string}        Name of the class to remove.
      */
     toggleClass: function(className) {
@@ -340,6 +340,23 @@ HTMLElement.addMethods({
         } else {
             this.addClass(className);
         }
+    },
+    /**
+     * Calculate the cumulative offset from the left and top of the document.
+     * Accessible as array [x, y] or objects x||y
+     */
+    getXY: function() {
+        var valueX = 0, valueY = 0;
+        var element = this;
+        do {
+            valueY += element.offsetTop  || 0;
+            valueX += element.offsetLeft || 0;
+            element = element.offsetParent;
+        } while (element);
+        var offset = [valueX, valueY];
+        offset.x = valueX, offset.y = valueY;
+        
+        return offset;
     }
 });
 /**
