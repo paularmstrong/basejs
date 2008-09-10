@@ -4,10 +4,10 @@
 // @param source        {Object}        Object of keys and values to add to the destination.
 //
 Object.extend = function(destination, source) {
-  for(var property in source) {
-      destination[property] = source[property];
-  }
-  return destination;
+    for(var property in source) {
+        destination[property] = source[property];
+    }
+    return destination;
 };
 
 //
@@ -32,8 +32,8 @@ Object.addMethods({
     // Generate a URL-safe query string from the object.
     //
     toQueryString: function() {
-        var params = []
-        for(key in this) {
+        var params = [];
+        this.each(function(key) {
             var str = '';
             if(typeof this[key] != 'function') {
                 str = encodeURIComponent(key)+'=';
@@ -41,7 +41,7 @@ Object.addMethods({
                 str += encodeURIComponent(value);
                 params.push(str)
             }
-        }
+        }, this);
         return params.join('&');
     },
     //
