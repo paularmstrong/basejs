@@ -285,6 +285,63 @@ var Element = function(type, atts) {
     return this.el;
 };
 
+String.addMethods({
+    //
+    // trim trailing whitespace from a string
+    //
+    trim: function() {
+        var re = new RegExp(/\s+?/);
+        return this.replace(re, '');
+    }
+});
+
+HTMLElement.addMethods({
+    //
+    // Add a className to an element
+    // @param className     {string}        Name of the class to add.
+    //
+    addClass: function(className) {
+        if(!this.hasClass(className)) {
+            this.className += ' '+className.trim();
+        }
+        return this;
+    },
+    //
+    // Check if element has a given class name
+    // @param className     {string}        Name of the class to test against.
+    //
+    hasClass: function(className) {
+        var re = new RegExp('(?:^|\\s+)'+className+'(?:\\s+|$)');
+        return re.test(this.className);
+    },
+    //
+    // Remove a className from an element
+    // @param className     {string}        Name of the class to remove.
+    //
+    removeClass: function(className) {
+        if(this.hasClass(className)) {
+            var re = new RegExp('(?:^|\\s+)'+className+'(?:\\s+|$)');
+            this.className = this.className.replace(re, ' ');
+
+            // iterate through in case of multiple adjacent classes
+            if(this.hasClass(className)) { this.removeClass(className); } else {
+                this.className = this.className.trim();
+            }
+        }
+        return this;
+    },
+    //
+    // toggle a className on an element
+    // @param className     {string}        Name of the class to remove.
+    //
+    toggleClass: function(className) {
+        if(this.hasClass(className)) {
+            this.removeClass(className);
+        } else {
+            this.addClass(className);
+        }
+    }
+});
 //
 // Create our magic query selector. Load in Sizzle if necessary.
 // $(selector) returns a NodeList
