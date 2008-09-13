@@ -302,10 +302,17 @@ var Element = function(type, atts) {
 
 String.addMethods({
     /**
-     * trim trailing whitespace from a string
+     * Check if the string is empty or whitespace only
      */
-    trim: function() {
-        var re = new RegExp(/\s+?/);
+    blank: function() {
+        return /^\s*$/.test(this);
+    },
+    /**
+     * trim trailing whitespace or custom match from a string
+     * @param match         {string}        Regular Expression string to trim. (optional)
+     */
+    trim: function(match) {
+        var re = new RegExp(match) || new RegExp(/\s+?/);
         return this.replace(re, '');
     }
 });
