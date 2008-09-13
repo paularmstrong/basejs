@@ -359,12 +359,42 @@ HTMLElement.addMethods({
         return offset;
     }
 });
+
 /**
+ * Fire a custom 'dom:loaded' event using DOMContentLoaded if available, else use fallback
+ * Safari has had native implementation since WebKit 525+
+ *
+ * Clear console calls if there is no console
+ *
  * Create our magic query selector. Load in Sizzle if necessary.
  * $(selector) returns a NodeList
  * @param selector  {string}        CSS query of selectors
  */
 (function() {
+    // fire the custom dom:loaded event
+    var timer;
+    function fireContentLoaded() {
+        if(!document.loaded) {
+            if(timer) { window.clearInterval(timer); }
+        }
+        document.fire('dom:loaded');
+        document.loaded = true;
+    }
+
+    if(
+        /AppleWebKit/.test(navigator.appVersion) && 
+        parseInt(navigator.appVersion.match(/AppleWebKit\/(\d+)/)[1]) < 525
+    ) {
+        console.info('DOMContentLoaded not available. Falling back on document.readyState.')
+        timer = window.setInterval(function() {
+            if(/loaded|complete/.test(document.readyState)) {
+                fireContentLoaded();
+            }
+        }, 0);
+    } else {
+        document.addEventListener('DOMContentLoaded', fireContentLoaded, false); 
+    }
+    
     // make any failed console calls silent
     if(typeof console !== 'object') {
         console = { 
@@ -378,7 +408,7 @@ HTMLElement.addMethods({
         }
     } else {
         // note that at this time, Sizzle is not Internet Explorer compatible
-        console.warn('Selectors API not implemented in this browser. Falling back on Sizzle query selector.');
+        console.warn('Selectors API not available. Falling back on Sizzle query selector.');
         new Ajax.Request('sizzle.min.js', {
             method: 'get',
             format: 'text',
@@ -387,7 +417,7 @@ HTMLElement.addMethods({
                 // $(selector) is now available
             },
             onFailure: function(o) {
-                console.error('horrible failure getting sizzle')
+                console.error('Horrible failure getting Sizzle. That sucks.')
             }
         });
     }
