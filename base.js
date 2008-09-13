@@ -1,4 +1,19 @@
 /**
+ * baseJS is a work-in-progress lightweight JavaScript library.
+ * There is currently NO SUPPORT for Internet Explorer.
+ * The original intention of this framework is to provide helper methods for iPhone 
+ * development for all versions of the iPhone and iPod Touch Safari Browser.
+ * Everything also is tested and works in Firefox 2+.
+ *
+ * Many of the methods and ideals in this document have been taken from Prototype, jQuery, and YUI.
+ * License information coming sometime.
+ *
+ * Written by Paul Armstrong
+ * Contact: paul@paularmstrongdesigns.com
+ * Site: http://paularmstrongdesigns.com/projects/basejs
+ */
+
+/**
  * Add properties to an object
  * @param destination   {Object}        The object to add the property to.
  * @param source        {Object}        Object of keys and values to add to the destination.
@@ -359,6 +374,9 @@ HTMLElement.addMethods({
         return offset;
     }
 });
+
+
+Object.extend(document, { loaded: false });
 
 /**
  * Fire a custom 'dom:loaded' event using DOMContentLoaded if available, else use fallback
