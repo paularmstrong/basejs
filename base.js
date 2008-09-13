@@ -15,8 +15,8 @@
 
 /**
  * Add properties to an object
- * @param destination   {Object}        The object to add the property to.
- * @param source        {Object}        Object of keys and values to add to the destination.
+ * @param destination   {object}        The object to add the property to.
+ * @param source        {object}        Object of keys and values to add to the destination.
  */
 Object.extend = function(destination, source) {
     for(var property in source) {
@@ -27,7 +27,7 @@ Object.extend = function(destination, source) {
 
 /**
  * Helper to add methods to an Object. Just makes code easier on the eyes.
- * @param methods       {Object}        
+ * @param methods       {object}        
  */
 Object.prototype.addMethods = function(methods) {
     for(var method in methods) {
@@ -61,8 +61,8 @@ Object.addMethods({
     },
     /**
      * Iterate each key in the object
-     * @param iterator      {Function}      Function to run on each object key
-     * @param context       {Object}        Scope override (optional)
+     * @param iterator      {function}      Function to run on each object key
+     * @param context       {object}        Scope override (optional)
      */
     each: function(iterator, context) {
         iterator = iterator.bind(context);
@@ -74,9 +74,9 @@ Object.addMethods({
     },
     /**
      * iterate each key in the object after specified interval
-     * @param iterator      {Function}      Function to run on each object key
+     * @param iterator      {function}      Function to run on each object key
      * @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
-     * @param context       {Object}        Scope override (optional)
+     * @param context       {object}        Scope override (optional)
      */
     eachAfter: function(iterator, interval, context) {
         iterator = iterator.bind(context);
@@ -94,7 +94,7 @@ Object.addMethods({
     /**
      * Create and fire custom events
      * @param eventName     {string}        Name of the event
-     * @param memo          {Object}        Memo parameters for the event (optional)
+     * @param memo          {object}        Memo parameters for the event (optional)
      */
     fire: function(eventName, memo) {
         var event = document.createEvent('HTMLEvents');
@@ -147,21 +147,21 @@ Object.extend(Ajax, {
     /**
      * Ajax.Request makes a new XHR object request
      * @param url           {string}        location to access
-     * @param options       {Object}        (optional)
+     * @param options       {object}        (optional)
      *      @param method           {string}        post or get form method
-     *      @param asynchronous     {Boolean}       Only true supported at this time.
+     *      @param asynchronous     {boolean}       Only true supported at this time.
      *      @param contentType      {string}        Content mime type to send.
      *      @param encoding         {string}        Content encoding.
-     *      @param params           {Object}        Object of header parameters to send with the request.
-     *      @param format           {Object}        Response type assumption: 'text', 'json', 'object', 'xml'
-     *      @param sanitizeJSON     {Boolean}       Whether the JSON needs to be sanitized.
-     *      @param onUninitialized  {Function}      Ready state callback.
-     *      @param onConnected      {Function}      Ready state callback.
-     *      @param onRequested      {Function}      Ready state callback.
-     *      @param onProcessing     {Function}      Ready state callback.
-     *      @param onComplete       {Function}      Ready state callback. Includes response object.
-     *      @param onFailure        {Function}      Ready state callback. Includes response object. (recommended)
-     *      @param onSuccess        {Function}      Ready state callback. Includes response object. (recommended)
+     *      @param params           {object}        Object of header parameters to send with the request.
+     *      @param format           {object}        Response type assumption: 'text', 'json', 'object', 'xml'
+     *      @param sanitizeJSON     {boolean}       Whether the JSON needs to be sanitized.
+     *      @param onUninitialized  {function}      Ready state callback.
+     *      @param onConnected      {function}      Ready state callback.
+     *      @param onRequested      {function}      Ready state callback.
+     *      @param onProcessing     {function}      Ready state callback.
+     *      @param onComplete       {function}      Ready state callback. Includes response object.
+     *      @param onFailure        {function}      Ready state callback. Includes response object. (recommended)
+     *      @param onSuccess        {function}      Ready state callback. Includes response object. (recommended)
      */
     Request: function(url, options) {
         this.options = new Ajax(options);
@@ -189,9 +189,9 @@ Object.extend(Ajax, {
     },
     /**
      * Ajax.Response filters through an Ajax.Request response object to give most concise information possible.
-     * @param response      {Object}        The XMLHttpRequest object.
+     * @param response      {object}        The XMLHttpRequest object.
      * @param format        {string}        Type to respond with: 'text', 'json', 'object', 'xml'
-     * @param sanitize      {Boolean}       Whether the JSON needs to be sanitized.
+     * @param sanitize      {boolean}       Whether the JSON needs to be sanitized.
      */
     Response: function(response, format, sanitize) {
     	this.response = response;
@@ -287,7 +287,7 @@ Ajax.Response.addMethods({
 /**
  * Simplified element creation function
  * @param type      {string}        The type of element to create.
- * @param atts      {Object}        Attributes to attached to the HTMLElement.
+ * @param atts      {object}        Attributes to attached to the HTMLElement.
  */
 var Element = function(type, atts) {
     this.el = document.createElement(type);
