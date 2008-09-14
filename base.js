@@ -435,8 +435,8 @@ Object.extend(document, { loaded: false });
         };
     }
     if(typeof document.querySelectorAll === 'function') {
-        window.$ = function(selector) {
-            return document.querySelectorAll(selector);
+        window.$ = function(selector, context) {
+            return context.querySelectorAll(selector);
         }
     } else {
         // note that at this time, Sizzle is not Internet Explorer compatible
