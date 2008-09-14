@@ -41,14 +41,14 @@ Object.addMethods({
      * Check if the object is an array instance.
      */
     isArray: function(object) {
-        return (object != null && typeof object == "object" && 'splice' in object && 'join' in object);
+        return (this != null && typeof this == "object" && 'splice' in this && 'join' in this);
     },
     /**
      * Generate a URL-safe query string from the object.
      */
     toQueryString: function() {
         var params = [];
-        this.each(function(key) {
+        for(key in this) {
             var str = '';
             if(typeof this[key] != 'function') {
                 str = encodeURIComponent(key)+'=';
@@ -56,40 +56,8 @@ Object.addMethods({
                 str += encodeURIComponent(value);
                 params.push(str)
             }
-        }, this);
+        }
         return params.join('&');
-    },
-    /**
-     * Iterate each key in the object
-     * @param iterator      {function}      Function to run on each object key
-     * @param context       {object}        Scope override (optional)
-     */
-    each: function(iterator, context) {
-        iterator = iterator.bind(context);
-        try {
-            var c = this.length, i = 0;
-            while(i<c) { iterator(this[i]); i++ }
-        } catch(e) { throw e; }
-        return this;
-    },
-    /**
-     * iterate each key in the object after specified interval
-     * @param iterator      {function}      Function to run on each object key
-     * @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
-     * @param context       {object}        Scope override (optional)
-     */
-    eachAfter: function(iterator, interval, context) {
-        iterator = iterator.bind(context);
-        var c = this.length, i = 0;
-        try {
-            var eachIterator = setInterval(function() {
-                if(i === c) { clearInterval(eachIterator); } else {
-                    iterator(this[i]);
-                    i++;
-                }
-            }.bind(this), (interval || 1000));
-        } catch(e) { throw e; }
-        return this;
     },
     /**
      * Create and fire custom events
@@ -102,6 +70,45 @@ Object.addMethods({
         event.memo = memo || {};
      
         this.dispatchEvent(event);
+    }
+});
+
+Array.addMethods({
+    /**
+     * Run a function on each item in the array
+     * @param iterator      {function}      Function to run on each object key
+     * @param context       {object}        Scope override (optional)
+     */
+    each: function(iterator, context) {
+        iterator = iterator.bind(context);
+        try {
+            var c = this.length, i = 0;
+            while(i<c) { 
+                iterator(this[i]); i++ 
+            }
+        } catch(e) { throw e; }
+        return this;
+    },
+    /**
+     * Run a function on each item in the array after a specified interval
+     * @param iterator      {function}      Function to run on each object key
+     * @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
+     * @param context       {object}        Scope override (optional)
+     */
+    eachAfter: function(iterator, interval, context) {
+        iterator = iterator.bind(context);
+        var c = this.length, i = 0;
+        try {
+            var eachIterator = setInterval(function() {
+                if(i === c) { 
+                    clearInterval(eachIterator);
+                    return this;
+                } else {
+                    iterator(this[i]);
+                    i++;
+                }
+            }.bind(this), (interval || 1000));
+        } catch(e) { throw e; }
     }
 });
 
