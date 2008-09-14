@@ -25,37 +25,23 @@ Object.extend = function(destination, source) {
     return destination;
 };
 
-/**
- * Helper to add methods to an Object. Just makes code easier on the eyes.
- * @param methods       {object}        
- */
-Object.prototype.addMethods = function(methods) {
-    for(var method in methods) {
-        this.prototype[method] = methods[method];
-    }
-    return this;
-};
-
-Object.addMethods({
+Object.extend(Object, {
     /**
      * Check if the object is an array instance.
      */
     isArray: function(object) {
-        return (this != null && typeof this == "object" && 'splice' in this && 'join' in this);
+        return (object != null && typeof object == "object" && 'splice' in object && 'join' in object);
     },
     /**
      * Generate a URL-safe query string from the object.
      */
-    toQueryString: function() {
+    toQueryString: function(object) {
         var params = [];
-        for(key in this) {
-            var str = '';
-            if(typeof this[key] != 'function') {
-                str = encodeURIComponent(key)+'=';
-                var value = (Object.isArray(this[key])) ? this[key].join(',') : this[key];
-                str += encodeURIComponent(value);
-                params.push(str)
-            }
+        for(var key in object) {
+            var str = encodeURIComponent(key)+'=';
+            var value = (Object.isArray(object[key])) ? object[key].join(',') : object[key];
+            str += encodeURIComponent(value);
+            params.push(str)
         }
         return params.join('&');
     },
@@ -64,16 +50,16 @@ Object.addMethods({
      * @param eventName     {string}        Name of the event
      * @param memo          {object}        Memo parameters for the event (optional)
      */
-    fire: function(eventName, memo) {
+    fire: function(element, eventName, memo) {
         var event = document.createEvent('HTMLEvents');
         event.initEvent(eventName, true, true);
         event.memo = memo || {};
      
-        this.dispatchEvent(event);
+        element.dispatchEvent(event);
     }
 });
 
-Array.addMethods({
+Object.extend(Array.prototype, {
     /**
      * Run a function on each item in the array
      * @param iterator      {function}      Function to run on each object key
@@ -112,7 +98,7 @@ Array.addMethods({
     }
 });
 
-Function.addMethods({
+Object.extend(Function.prototype, {
     /**
      * Override scope of a callback function on an event.
      */
@@ -186,7 +172,7 @@ Object.extend(Ajax, {
             this.transport.onreadystatechange = this.onStateChange.bind(this);
             this.setRequestHeaders();
 
-            var params = this.options.params.toQueryString();
+            var params = Object.toQueryString(this.options.params);
 
             this.body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
             this.transport.send(this.body);
@@ -210,7 +196,7 @@ Object.extend(Ajax, {
 Object.extend(Ajax.Request, {
     Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
 });
-Ajax.Request.addMethods({
+Object.extend(Ajax.Request.prototype, {
     onStateChange: function() {
         var readyState = this.transport.readyState;
         if (readyState > 1 && !((readyState == 4) && this._complete)) {
@@ -249,13 +235,11 @@ Ajax.Request.addMethods({
         }
 
         for(var name in headers) {
-            if(typeof headers[name] != 'function') {
-                this.transport.setRequestHeader(name, headers[name]);
-            }
+            this.transport.setRequestHeader(name, headers[name]);
         }
     }
 });
-Ajax.Response.addMethods({
+Object.extend(Ajax.Response.prototype, {
     getResponse: function() {
     	switch(this.format.toLowerCase()) {
     		case 'xml':
@@ -299,15 +283,13 @@ Ajax.Response.addMethods({
 var Element = function(type, atts) {
     this.el = document.createElement(type);
 
-    for(attr in atts) {
-        if(typeof this.el[attr] !== 'function') {
-            this.el.setAttribute(attr, atts[attr]);
-        }
+    for(var attr in atts) {
+        this.el.setAttribute(attr, atts[attr]);
     }
     return this.el;
 };
 
-String.addMethods({
+Object.extend(String.prototype, {
     /**
      * Check if the string is empty or whitespace only
      */
@@ -324,7 +306,7 @@ String.addMethods({
     }
 });
 
-HTMLElement.addMethods({
+Object.extend(HTMLElement.prototype, {
     /**
      * Add a className to an element
      * @param className     {string}        Name of the class to add.
@@ -386,11 +368,19 @@ HTMLElement.addMethods({
         offset.x = valueX, offset.y = valueY;
         
         return offset;
+    },
+    fire: function(eventName, memo) {
+        Object.fire(this, eventName, memo);
     }
 });
 
 
-Object.extend(document, { loaded: false });
+Object.extend(document, { 
+    loaded: false,
+    fire: function(eventName, memo) {
+        Object.fire(this, eventName, memo);
+    }
+});
 
 /**
  * Fire a custom 'dom:loaded' event using DOMContentLoaded if available, else use fallback
