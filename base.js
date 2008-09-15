@@ -14,7 +14,7 @@
  */
  
 var userAgent = navigator.userAgent.toLowerCase();
-var Base = {
+var base = {
     /**
      * Add properties to an object
      * @param destination   {object}        The object to add the property to.
@@ -40,7 +40,7 @@ var Base = {
     }
 };
 
-Base.extend(Object, {
+base.extend(Object, {
     /**
      * Check if the object is an array instance.
      */
@@ -74,7 +74,7 @@ Base.extend(Object, {
     }
 });
 
-Base.extend(Array.prototype, {
+base.extend(Array.prototype, {
     /**
      * Run a function on each item in the array
      * @param iterator      {function}      Function to run on each object key
@@ -113,7 +113,7 @@ Base.extend(Array.prototype, {
     }
 });
 
-Base.extend(Function.prototype, {
+base.extend(Function.prototype, {
     /**
      * Override scope of a callback function on an event.
      */
@@ -146,12 +146,12 @@ var Ajax = function(options) {
 		sanitizeJSON: false
     };
     
-    Base.extend(this.options, options || {});
+    base.extend(this.options, options || {});
     this.options.method = this.options.method.toLowerCase();
     
     return this.options;
 };
-Base.extend(Ajax, {
+base.extend(Ajax, {
     /**
      * Ajax.Request makes a new XHR object request
      * @param url           {string}        location to access
@@ -208,10 +208,10 @@ Base.extend(Ajax, {
     }
 });
 
-Base.extend(Ajax.Request, {
+base.extend(Ajax.Request, {
     Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
 });
-Base.extend(Ajax.Request.prototype, {
+base.extend(Ajax.Request.prototype, {
     onStateChange: function() {
         var readyState = this.transport.readyState;
         if (readyState > 1 && !((readyState == 4) && this._complete)) {
@@ -254,7 +254,7 @@ Base.extend(Ajax.Request.prototype, {
         }
     }
 });
-Base.extend(Ajax.Response.prototype, {
+base.extend(Ajax.Response.prototype, {
     getResponse: function() {
     	switch(this.format.toLowerCase()) {
     		case 'xml':
@@ -304,7 +304,7 @@ var Element = function(type, atts) {
     return this.el;
 };
 
-Base.extend(String.prototype, {
+base.extend(String.prototype, {
     /**
      * Check if the string is empty or whitespace only
      */
@@ -321,7 +321,7 @@ Base.extend(String.prototype, {
     }
 });
 
-Base.extend(HTMLElement.prototype, {
+base.extend(HTMLElement.prototype, {
     /**
      * Add a className to an element
      * @param className     {string}        Name of the class to add.
@@ -390,7 +390,7 @@ Base.extend(HTMLElement.prototype, {
 });
 
 
-Base.extend(document, { 
+base.extend(document, { 
     loaded: false,
     fire: function(eventName, memo) {
         Object.fire(this, eventName, memo);
@@ -419,8 +419,8 @@ Base.extend(document, {
     }
 
     if(
-        Base.browser.webkit && 
-        parseInt(Base.browser.version) < 525
+        base.browser.webkit && 
+        parseInt(base.browser.version) < 525
     ) {
         console.info('DOMContentLoaded not available. Falling back on document.readyState.')
         timer = window.setInterval(function() {
