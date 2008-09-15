@@ -184,8 +184,8 @@ base.extend(Ajax, {
         try {
             this.transport.open(this.options.method, url, this.options.asynchronous);
 
-            this.transport.onreadystatechange = this.onStateChange.bind(this);
-            this.setRequestHeaders();
+            this.transport.onreadystatechange = this._onStateChange.bind(this);
+            this._setRequestHeaders();
 
             var params = Object.toQueryString(this.options.params);
 
@@ -212,13 +212,13 @@ base.extend(Ajax.Request, {
     Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
 });
 base.extend(Ajax.Request.prototype, {
-    onStateChange: function() {
+    _onStateChange: function() {
         var readyState = this.transport.readyState;
         if (readyState > 1 && !((readyState == 4) && this._complete)) {
-            this.respondToReadyState(this.transport.readyState);
+            this._respondToReadyState(this.transport.readyState);
         }
     },
-    respondToReadyState: function(state) {
+    _respondToReadyState: function(state) {
         this._complete = (state === 4) ? true : false;
 
     	if(this._complete) {
@@ -226,7 +226,7 @@ base.extend(Ajax.Request.prototype, {
 
         	// if complete, check for onFailure or onSuccess and fire function if available
             if(this.options.onFailure || this.options.onSuccess) {
-                (this.options['on'+Ajax.Request.Events[this.getSuccessCode()]] || function() {} )(res);
+                (this.options['on'+Ajax.Request.Events[this._getSuccessCode()]] || function() {} )(res);
             }
 
         	// if onEvent function is available for this state
@@ -235,11 +235,11 @@ base.extend(Ajax.Request.prototype, {
     		(this.options['on'+Ajax.Request.Events[state]] || function() {})();
     	}
     },
-    getSuccessCode: function() {
+    _getSuccessCode: function() {
         var successCode = (!this.transport.status) ? 5 : (this.transport.status >= 200 && this.transport.status < 300) ? 6 : 5;
         return successCode;
     },
-    setRequestHeaders: function() {
+    _setRequestHeaders: function() {
         var headers = {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
@@ -269,7 +269,10 @@ base.extend(Ajax.Response.prototype, {
     		break;
     		case 'text':
     		    return this.response.responseText;
-    		break
+    		break;
+    		default:
+    		    return this.response;
+    		break;
     	}
     },
     isJSON: function() {
@@ -287,6 +290,35 @@ base.extend(Ajax.Response.prototype, {
     	} catch(e) {
     		console.error('json eval error', e);
     	}
+    }
+});
+
+/**
+ * HTML Templates that can be filled with object data.
+ * @param template  {string}        The HTML markup that will be used for the template.
+ */
+var Template = function(template) {
+    this.template = template;
+    this.output = this.template;
+    return this.template;
+}
+base.extend(Template.prototype, {
+    /**
+     * Parse the data object into the template, replacing #{key} with key values.
+     * @param data      {object}        Key/value pairs to parse into the template object.
+     */
+    parse: function(data) {
+        this.data = data;
+        this.output = this.output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
+        return this.output;
+    },
+    /**
+     * Private method for parsing the template.
+     * @param match1    {string}        Matches #{key}
+     * @param match2    {string}        Matches key
+     */
+    _replaceCallback: function(match1, match2) {
+        return this.data[match2];
     }
 });
 
