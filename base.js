@@ -12,20 +12,35 @@
  * Contact: paul@paularmstrongdesigns.com
  * Site: http://paularmstrongdesigns.com/projects/basejs
  */
-
-/**
- * Add properties to an object
- * @param destination   {object}        The object to add the property to.
- * @param source        {object}        Object of keys and values to add to the destination.
- */
-Object.extend = function(destination, source) {
-    for(var property in source) {
-        destination[property] = source[property];
+ 
+var userAgent = navigator.userAgent.toLowerCase();
+var Base = {
+    /**
+     * Add properties to an object
+     * @param destination   {object}        The object to add the property to.
+     * @param source        {object}        Object of keys and values to add to the destination.
+     */
+    extend: function(destination, source) {
+        for(var property in source) {
+            destination[property] = source[property];
+        }
+        return destination;
+    },
+    /**
+     * Convenience browser checking. Thanks to prototype && jquery.
+     * I will hopefully never really need this.
+     */
+    browser: {
+    	version: (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [])[1],
+    	webkit: /webkit/.test(userAgent),
+    	opera: /opera/.test(userAgent), // untested
+    	msie: /msie/.test(userAgent) && !/opera/.test(userAgent), // not supported yet
+    	mozilla: /mozilla/.test(userAgent) && !/(compatible|webkit)/.test(userAgent),
+        msafari: /apple.*mobile.*safari/.test(userAgent)
     }
-    return destination;
 };
 
-Object.extend(Object, {
+Base.extend(Object, {
     /**
      * Check if the object is an array instance.
      */
@@ -59,7 +74,7 @@ Object.extend(Object, {
     }
 });
 
-Object.extend(Array.prototype, {
+Base.extend(Array.prototype, {
     /**
      * Run a function on each item in the array
      * @param iterator      {function}      Function to run on each object key
@@ -98,7 +113,7 @@ Object.extend(Array.prototype, {
     }
 });
 
-Object.extend(Function.prototype, {
+Base.extend(Function.prototype, {
     /**
      * Override scope of a callback function on an event.
      */
@@ -131,12 +146,12 @@ var Ajax = function(options) {
 		sanitizeJSON: false
     };
     
-    Object.extend(this.options, options || {});
+    Base.extend(this.options, options || {});
     this.options.method = this.options.method.toLowerCase();
     
     return this.options;
 };
-Object.extend(Ajax, {
+Base.extend(Ajax, {
     /**
      * Ajax.Request makes a new XHR object request
      * @param url           {string}        location to access
@@ -193,10 +208,10 @@ Object.extend(Ajax, {
     }
 });
 
-Object.extend(Ajax.Request, {
+Base.extend(Ajax.Request, {
     Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
 });
-Object.extend(Ajax.Request.prototype, {
+Base.extend(Ajax.Request.prototype, {
     onStateChange: function() {
         var readyState = this.transport.readyState;
         if (readyState > 1 && !((readyState == 4) && this._complete)) {
@@ -239,7 +254,7 @@ Object.extend(Ajax.Request.prototype, {
         }
     }
 });
-Object.extend(Ajax.Response.prototype, {
+Base.extend(Ajax.Response.prototype, {
     getResponse: function() {
     	switch(this.format.toLowerCase()) {
     		case 'xml':
@@ -289,7 +304,7 @@ var Element = function(type, atts) {
     return this.el;
 };
 
-Object.extend(String.prototype, {
+Base.extend(String.prototype, {
     /**
      * Check if the string is empty or whitespace only
      */
@@ -306,7 +321,7 @@ Object.extend(String.prototype, {
     }
 });
 
-Object.extend(HTMLElement.prototype, {
+Base.extend(HTMLElement.prototype, {
     /**
      * Add a className to an element
      * @param className     {string}        Name of the class to add.
@@ -375,7 +390,7 @@ Object.extend(HTMLElement.prototype, {
 });
 
 
-Object.extend(document, { 
+Base.extend(document, { 
     loaded: false,
     fire: function(eventName, memo) {
         Object.fire(this, eventName, memo);
@@ -404,8 +419,8 @@ Object.extend(document, {
     }
 
     if(
-        /AppleWebKit/.test(navigator.appVersion) && 
-        parseInt(navigator.appVersion.match(/AppleWebKit\/(\d+)/)[1]) < 525
+        Base.browser.webkit && 
+        parseInt(Base.browser.version) < 525
     ) {
         console.info('DOMContentLoaded not available. Falling back on document.readyState.')
         timer = window.setInterval(function() {
