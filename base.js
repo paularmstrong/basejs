@@ -440,7 +440,8 @@ base.extend(document, {
  *
  * Create our magic query selector. Load in Sizzle if necessary.
  * $(selector) returns a NodeList
- * @param selector  {string}        CSS query of selectors
+ * @param selector  {string}        CSS query of selectors.
+ * @param context   {HTMLElement}   Context for the query. Limits scope of query.
  */
 (function() {
     // fire the custom dom:loaded event
