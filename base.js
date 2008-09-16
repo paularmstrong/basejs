@@ -11,6 +11,8 @@
  * Written by Paul Armstrong
  * Contact: paul@paularmstrongdesigns.com
  * Site: http://paularmstrongdesigns.com/projects/basejs
+ *
+ * Internal methods and properties start with an underscore. You probably shouldn't use them.
  */
  
 var userAgent = navigator.userAgent.toLowerCase();
@@ -189,8 +191,8 @@ base.extend(Ajax, {
 
             var params = Object.toQueryString(this.options.params);
 
-            this.body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
-            this.transport.send(this.body);
+            this._body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
+            this.transport.send(this._body);
         } catch(e) {
             console.error('request error', e)
         }
