@@ -311,6 +311,7 @@ base.extend(Template.prototype, {
      */
     parse: function(data) {
         this.data = data;
+        // match every instance of #{key} and replace it with what's in the data object
         this.output = this.output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
         return this.output;
     },
@@ -320,7 +321,7 @@ base.extend(Template.prototype, {
      * @param match2    {string}        Matches key
      */
     _replaceCallback: function(match1, match2) {
-        return this.data[match2];
+        return this.data[match2] || '';
     }
 });
 
@@ -475,6 +476,7 @@ base.extend(document, {
     }
     if(typeof document.querySelectorAll === 'function') {
         window.$ = function(selector, context) {
+            context = (!!context) ? context : document;
             return context.querySelectorAll(selector);
         }
     } else {
