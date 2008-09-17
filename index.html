@@ -10,9 +10,128 @@
 </head>
 <body>
     
-    <div id="dookie"></div>
-    <div class="cookie"></div>
-    <div class="cookie"></div>
+    <h1>baseJS Documentation</h1>
+    
+    <h2>The <code>base</code> object</h2>
+    
+    <p>Extending objects in a clean and easy-to-read manner is the core of baseJS. At its root is the <code>base</code> object.</p>
 
+    <h3>Available Methods and Properties</h3>
+    <ul>
+        <li><a href="#extend">extend()</a></li>
+        <li><a href="#browser">browser</a></li>
+    </ul>
+    
+    <h4 id="extend">extend(destination, properties)</h4>
+    
+    <h5>Example</h5>
+    <p>
+        <code>
+            var myObject = function(a) { return a*2; }<br />
+            base.extend(myObject, { property1: 'Lorem', property2: 'Ipsum' });<br />
+            base.extend(myObject.prototype, { method: function() {} });
+        </code>
+    </p>
+    
+    <p>In this example, we've created an object <var>myObject</var> that returns <samp>a*2</samp>. In the second line, we are assigning a few properties to the <var>myObject</var> variable. In the third line, we see the shortcut for creating multiple methods on <var>myObject.prototype</var>. This shortens the amount of code you will have to write and the verbosity of looking at multiple instance of <code>myObject.prototype.methodName = function() {}</code>.</p>
+    
+    <h4 id="browser">browser</h4>
+    
+    <h5>Properties</h5>
+    <ul>
+        <li><code>base.browser.version //</code> <samp>531</samp>. <em>Number</em> browser version, according to the userAgent.</li>
+        <li><code>base.browser.webkit //</code> <samp>true</samp>. <em>Boolean</em> browser is WebKit.</li>
+        <li><code>base.browser.opera //</code> <samp>true</samp>. <em>Boolean</em> browser is Opera.</li>
+        <li><code>base.browser.msie //</code> <samp>true</samp>. <em>Boolean</em> browser is Internet Explorer.</li>
+        <li><code>base.browser.mozilla //</code> <samp>true</samp>. <em>Boolean</em> browser is Mozilla/Firefox.</li>
+        <li><code>base.browser.msafari //</code> <samp>true</samp>. <em>Boolean</em> browser is Mobile Safari (iPhone and iPod Touch).</li>
+    </ul>
+    
+    <!-- OBJECT -->
+    <h2>The <code>Object</code></h2>
+    
+    <p></p>
+    
+    <h3>Available Methods and Properties</h3>
+    
+    <ul>
+        <li><a href="#isArray">isArray()</a></li>
+        <li><a href="#toQueryString">toQueryString()</a></li>
+        <li><a href="#fire">fire()</a></li>
+    </ul>
+    
+    <h4 id="isArray">isArray(object)</h4>
+    
+    <p>Check if an object is an Array. JavaScript does not have any default method for doing this.</p>
+    
+    <h5>Example</h5>
+    
+    <p>
+        <code>var myObj = {}; var myArr = [];</code><br />
+        <code>Object.isArray(myObj); //</code> <samp>false</samp><br />
+        <code>Object.isArray(myArr); //</code> <samp>true</samp>
+    </p>
+    
+    <h4 id="toQueryString">toQueryString(object)</h4>
+    
+    <p>Convert an associative object to a query string for passing as parameters to POST or GET calls.</p>
+    
+    <h5>Example</h5>
+    
+    <p>
+        <code>var person = { first_name: 'Paul', last_name: 'Armstrong' };</code><br />
+        <code>Object.toQueryString(person); //</code> <samp>"first_name=Paul&amp;last_name=Armstrong"</samp>
+    </p>
+    
+    <!-- ARRAY -->
+    <h2>Array.prototype</h2>
+    
+    <h3>Available Methods and Properties</h3>
+    
+    <ul>
+        <li><a href="#each">each()</a></li>
+        <li><a href="#eachAfter">eachAfter()</a></li>
+    </ul>
+    
+    <h4 id="each">each(iterator, context)</h4>
+    
+    <p>Iterate a function over each index inside the Array.</p>
+    
+    <h5>Examples</h5>
+    
+    <p>
+        <code>var team = ['Paul', 'Zach', 'Jesse'];</code><br />
+        <code>var awesome = function(person) { alert(person); };</code><br />
+        <code>team.each(awesome); //</code> <samp>alerts -> 'Paul' then 'Zach' then 'Jesse'</samp>
+    </p>
+    
+    <p>
+        <code>var team = ['Paul', 'Zach', 'Jesse'];</code><br />
+        <code>var awesome = function(person) { this[person] = true; };</code><br />
+        <code>team.each(awesome, team); //</code> <samp>applies team.Paul, team.Zach and team.Jesse as true</samp>
+    </p>
+    
+    <h4 id="eachAfter">eachAfter(iterator, interval, context)</h4>
+    
+    <p>Same method as <a href="#each">each()</a>, but applies waits over the interval (in milliseconds) to apply to each item in the Array. This is a regular interval method and will prevent your scripts from continuing until it has completed.</p>
+    
+    <h2>Function.prototype</h2>
+    
+    <p></p>
+    
+    <h3>Available Methods and Properties</h3>
+    
+    <ul>
+        <li><a href="#bind">bind()</a></li>
+        <li><a href="#bindAsEventListener">bindAsEventListener()</a></li>
+    </ul>
+    
+    <h4 id="bindAsEventListener">bindAsEventListener()</h4>
+    
+    <p>Override the scope of a callback function on an Event Listener.</p>
+    
+    <h5>Examples</h5>
+    
+    
 </body>
 </html>

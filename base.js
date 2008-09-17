@@ -67,7 +67,7 @@ base.extend(Object, {
      * @param eventName     {string}        Name of the event
      * @param memo          {object}        Memo parameters for the event (optional)
      */
-    fire: function(element, eventName, memo) {
+    _fire: function(element, eventName, memo) {
         var event = document.createEvent('HTMLEvents');
         event.initEvent(eventName, true, true);
         event.memo = memo || {};
@@ -420,7 +420,7 @@ base.extend(HTMLElement.prototype, {
         return offset;
     },
     fire: function(eventName, memo) {
-        Object.fire(this, eventName, memo);
+        Object._fire(this, eventName, memo);
     }
 });
 
@@ -428,7 +428,7 @@ base.extend(HTMLElement.prototype, {
 base.extend(document, { 
     loaded: false,
     fire: function(eventName, memo) {
-        Object.fire(this, eventName, memo);
+        Object._fire(this, eventName, memo);
     }
 });
 
