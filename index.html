@@ -6,6 +6,7 @@
     <title>baseJS</title>
     
     <script src="base.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="base.css" type="text/css" media="all" />
     
 </head>
 <body>
@@ -102,7 +103,7 @@
     <p>
         <code>var team = ['Paul', 'Zach', 'Jesse'];</code><br />
         <code>var awesome = function(person) { alert(person); };</code><br />
-        <code>team.each(awesome); //</code> <samp>alerts -> 'Paul' then 'Zach' then 'Jesse'</samp>
+        <code>team.each(awesome); //</code> <samp>alerts &rarr; 'Paul' then 'Zach' then 'Jesse'</samp>
     </p>
     
     <p>
@@ -115,6 +116,7 @@
     
     <p>Same method as <a href="#each">each()</a>, but applies waits over the interval (in milliseconds) to apply to each item in the Array. This is a regular interval method and will prevent your scripts from continuing until it has completed.</p>
     
+    <!-- FUNCTION -->
     <h2>Function.prototype</h2>
     
     <p></p>
@@ -126,12 +128,105 @@
         <li><a href="#bindAsEventListener">bindAsEventListener()</a></li>
     </ul>
     
-    <h4 id="bindAsEventListener">bindAsEventListener()</h4>
+    <h4 id="bind">bind(object[, arguments&hellip;])</h4>
     
-    <p>Override the scope of a callback function on an Event Listener.</p>
+    <p>Override the execution scope of a function with <var>object</var> and optionally prepend arguments to the input.</p>
     
     <h5>Examples</h5>
     
+    <p>
+        <code><pre>var obj = {
+    name: 'A nice demo',
+    fx: function() {
+        alert(this.name);
+    }
+};
+
+window.name = 'I am such a beautiful window!';
+
+function run(f) { f(); }
+
+run(obj.fx); // window scope alerts &rarr; 'I am such a beautiful window!'
+run(obj.fx.bind(obj)); // obj scope alerts &rarr; 'A nice demo'
+        </pre></code>
+    </p>
     
+    <h4 id="bindAsEventListener">bindAsEventListener(object[, arguments&hellip;])</h4>
+    
+    <p><a href="#bind">Binding method</a> specific for Event Listener callbacks.</p>
+    
+    <h5>Examples</h5>
+    
+    <p>
+        <code><pre>var obj = { name: 'A nice demo' };
+
+function handler(event) {
+    alert(this.name);
+}
+
+document.body.addEventListener('click', handler.bindAsEventListener(obj));
+// Now any click on the page alerts obj.name
+        </pre></code>
+    </p>
+    
+    <h2>Element</h2>
+    
+    <h3>Available Methods and Properties</h3>
+    
+    <ul>
+        <li><a href="#Element">Element()</a></li>
+    </ul>
+    
+    <h4 id="#Element">Element(type[, atts, content])</h4>
+    
+    <p>A helper method for quickly creating new HTMLElements with attributes.</p>
+    
+    <h5>Examples</h5>
+    
+    <p>
+        <code>new Element('a', { class: 'topLink', href: '#top' }, 'Back to Top');<br />//</code> Returns the HTMLElement <samp>&lt;a class="topLink" href="#top"&gt;Back to Top&lt;/a&gt;</samp>
+    </p>
+    
+    <h2>HTMLElement.prototype</h2>
+    
+    <h3>Available Methods and Properties</h3>
+    
+    <ul>
+        <li><a href="#addClass">addClass()</a></li>
+        <li><a href="#hasClass">hasClass()</a></li>
+        <li><a href="#removeClass">removeClass()</a></li>
+        <li><a href="#toggleClass">toggleClass()</a></li>
+        <li><a href="#getXY">getXY()</a></li>
+        <li><a href="#HTMLElement-fire">fire()</a></li>
+    </ul>
+    
+    <h4 id="addClass">addClass(className)</h4>
+    
+    <h5>Examples</h5>
+    
+    <p><code>document.body.addClass('body'); // &lt;body class="body"&gt;</code></p>
+    
+    <h4 id="hasClass">hasClass(className)</h4>
+    
+    <h5>Examples</h5>
+    
+    <p><code>document.body.hasClass('body'); // true or false</code></p>
+    
+    <h4 id="removeClass">removeClass(className)</h4>
+    
+    <p>Safely remove a <var>className</var> from the HTMLElement by checking surrounding whitespace and/or the beginning and end of the class attribute.</p>
+    
+    <h5>Examples</h5>
+    
+    <p><code>document.body.removeClass('body'); // true or false</code></p>
+    
+    <h4 id="toggleClass">toggleClass(className)</h4>
+    
+    <p>If the HTMLElement has the specified <var>className</var>, remove it, otherwise add it.</p>
+
+    <h5>Examples</h5>
+    
+    <p><code>document.body.toggleClass('body'); // returns the element</code></p>
+
 </body>
 </html>

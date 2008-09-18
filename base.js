@@ -117,15 +117,6 @@ base.extend(Array.prototype, {
 
 base.extend(Function.prototype, {
     /**
-     * Override scope of a callback function on an event.
-     */
-    bindAsEventListener: function() {
-        var __method = this, object = arguments[0];
-        return function(event) {
-            return __method.apply(object, [event || window.event].concat(arguments));
-        }
-    },
-    /**
      * Override scope of a function.
      */
     bind: function() {
@@ -134,8 +125,16 @@ base.extend(Function.prototype, {
         return function() {
             return __method.apply(object, arguments);
         }
-    }
-});
+    },
+    /**
+     * Override scope of a callback function on an event.
+     */
+    bindAsEventListener: function() {
+        var __method = this, object = arguments[0];
+        return function(event) {
+            return __method.apply(object, [event || window.event].concat(arguments));
+        }
+    }});
 
 var Ajax = function(options) {
     this.options = {
@@ -328,14 +327,17 @@ base.extend(Template.prototype, {
 /**
  * Simplified element creation function
  * @param type      {string}        The type of element to create.
- * @param atts      {object}        Attributes to attached to the HTMLElement.
+ * @param atts      {object}        Attributes to attached to the HTMLElement. (optional)
+ * @param content   {string}        Set the innerHTML of the element. (optional)
  */
-var Element = function(type, atts) {
+var Element = function(type, atts, content) {
     this.el = document.createElement(type);
 
     for(var attr in atts) {
         this.el.setAttribute(attr, atts[attr]);
     }
+    
+    this.el.innerHTML = content || '';
     return this.el;
 };
 
