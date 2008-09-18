@@ -26,27 +26,22 @@
     <h4 id="extend">extend(destination, properties)</h4>
     
     <h5>Example</h5>
-    <p>
-        <code>
-            var myObject = function(a) { return a*2; }<br />
-            base.extend(myObject, { property1: 'Lorem', property2: 'Ipsum' });<br />
-            base.extend(myObject.prototype, { method: function() {} });
-        </code>
-    </p>
+    <pre><p><code>var myObject = function(a) { return a*2; }<br />
+base.extend(myObject, { property1: 'Lorem', property2: 'Ipsum' });<br />
+base.extend(myObject.prototype, { method: function() {} });</code></p></pre>
     
     <p>In this example, we've created an object <var>myObject</var> that returns <samp>a*2</samp>. In the second line, we are assigning a few properties to the <var>myObject</var> variable. In the third line, we see the shortcut for creating multiple methods on <var>myObject.prototype</var>. This shortens the amount of code you will have to write and the verbosity of looking at multiple instance of <code>myObject.prototype.methodName = function() {}</code>.</p>
     
     <h4 id="browser">browser</h4>
     
     <h5>Properties</h5>
-    <ul>
-        <li><code>base.browser.version //</code> <samp>531</samp>. <em>Number</em> browser version, according to the userAgent.</li>
-        <li><code>base.browser.webkit //</code> <samp>true</samp>. <em>Boolean</em> browser is WebKit.</li>
-        <li><code>base.browser.opera //</code> <samp>true</samp>. <em>Boolean</em> browser is Opera.</li>
-        <li><code>base.browser.msie //</code> <samp>true</samp>. <em>Boolean</em> browser is Internet Explorer.</li>
-        <li><code>base.browser.mozilla //</code> <samp>true</samp>. <em>Boolean</em> browser is Mozilla/Firefox.</li>
-        <li><code>base.browser.msafari //</code> <samp>true</samp>. <em>Boolean</em> browser is Mobile Safari (iPhone and iPod Touch).</li>
-    </ul>
+
+<pre><p><code>base.browser.version // 531. Number browser version, according to the userAgent.
+base.browser.webkit // true. Boolean browser is WebKit.
+base.browser.opera // true. Boolean browser is Opera.
+base.browser.msie // true. Boolean browser is Internet Explorer.
+base.browser.mozilla // true. Boolean browser is Mozilla/Firefox.
+base.browser.msafari // true. Boolean browser is Mobile Safari (iPhone and iPod Touch).</code></p></pre>
     
     <!-- OBJECT -->
     <h2>The <code>Object</code></h2>
@@ -67,11 +62,11 @@
     
     <h5>Example</h5>
     
-    <p>
-        <code>var myObj = {}; var myArr = [];</code><br />
-        <code>Object.isArray(myObj); //</code> <samp>false</samp><br />
-        <code>Object.isArray(myArr); //</code> <samp>true</samp>
-    </p>
+    <pre><p><code>var myObj = {}; 
+var myArr = [];
+
+Object.isArray(myObj); // returns false
+Object.isArray(myArr); // returns true</code></p></pre>
     
     <h4 id="toQueryString">toQueryString(object)</h4>
     
@@ -79,10 +74,8 @@
     
     <h5>Example</h5>
     
-    <p>
-        <code>var person = { first_name: 'Paul', last_name: 'Armstrong' };</code><br />
-        <code>Object.toQueryString(person); //</code> <samp>"first_name=Paul&amp;last_name=Armstrong"</samp>
-    </p>
+    <pre><p><code>var person = { first_name: 'Paul', last_name: 'Armstrong' };
+Object.toQueryString(person); // "first_name=Paul&amp;last_name=Armstrong"</code></p></pre>
     
     <!-- ARRAY -->
     <h2>Array.prototype</h2>
@@ -100,17 +93,13 @@
     
     <h5>Examples</h5>
     
-    <p>
-        <code>var team = ['Paul', 'Zach', 'Jesse'];</code><br />
-        <code>var awesome = function(person) { alert(person); };</code><br />
-        <code>team.each(awesome); //</code> <samp>alerts &rarr; 'Paul' then 'Zach' then 'Jesse'</samp>
-    </p>
+    <pre><p><code>var team = ['Paul', 'Zach', 'Jesse'];<br />
+var awesome = function(person) { alert(person); };<br />
+team.each(awesome); // alerts &rarr; 'Paul' then 'Zach' then 'Jesse'</code></p></pre>
     
-    <p>
-        <code>var team = ['Paul', 'Zach', 'Jesse'];</code><br />
-        <code>var awesome = function(person) { this[person] = true; };</code><br />
-        <code>team.each(awesome, team); //</code> <samp>applies team.Paul, team.Zach and team.Jesse as true</samp>
-    </p>
+    <pre><p><code>var team = ['Paul', 'Zach', 'Jesse'];
+var awesome = function(person) { this[person] = true; };
+team.each(awesome, team); // applies team.Paul, team.Zach and team.Jesse as true</code></p></pre>
     
     <h4 id="eachAfter">eachAfter(iterator, interval, context)</h4>
     
@@ -134,8 +123,8 @@
     
     <h5>Examples</h5>
     
-    <p>
-        <code><pre>var obj = {
+    
+        <pre><p><code>var obj = {
     name: 'A nice demo',
     fx: function() {
         alert(this.name);
@@ -147,9 +136,8 @@ window.name = 'I am such a beautiful window!';
 function run(f) { f(); }
 
 run(obj.fx); // window scope alerts &rarr; 'I am such a beautiful window!'
-run(obj.fx.bind(obj)); // obj scope alerts &rarr; 'A nice demo'
-        </pre></code>
-    </p>
+run(obj.fx.bind(obj)); // obj scope alerts &rarr; 'A nice demo'</code></p></pre>
+    
     
     <h4 id="bindAsEventListener">bindAsEventListener(object[, arguments&hellip;])</h4>
     
@@ -157,17 +145,16 @@ run(obj.fx.bind(obj)); // obj scope alerts &rarr; 'A nice demo'
     
     <h5>Examples</h5>
     
-    <p>
-        <code><pre>var obj = { name: 'A nice demo' };
+    
+        <pre><p><code>var obj = { name: 'A nice demo' };
 
 function handler(event) {
     alert(this.name);
 }
 
 document.body.addEventListener('click', handler.bindAsEventListener(obj));
-// Now any click on the page alerts obj.name
-        </pre></code>
-    </p>
+// Now any click on the page alerts obj.name</code></p></pre>
+    
     
     <h2>Element</h2>
     
@@ -183,9 +170,8 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
     
     <h5>Examples</h5>
     
-    <p>
-        <code>new Element('a', { class: 'topLink', href: '#top' }, 'Back to Top');<br />//</code> Returns the HTMLElement <samp>&lt;a class="topLink" href="#top"&gt;Back to Top&lt;/a&gt;</samp>
-    </p>
+    <pre><p><code>new Element('a', { class: 'topLink', href: '#top' }, 'Back to Top');
+// Returns the HTMLElement &lt;a class="topLink" href="#top"&gt;Back to Top&lt;/a&gt;</code></p></pre>
     
     <h2>HTMLElement.prototype</h2>
     
@@ -204,13 +190,13 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
     
     <h5>Examples</h5>
     
-    <p><code>document.body.addClass('body'); // &lt;body class="body"&gt;</code></p>
+    <pre><p><code>document.body.addClass('body'); // &lt;body class="body"&gt;</code></p></pre>
     
     <h4 id="hasClass">hasClass(className)</h4>
     
     <h5>Examples</h5>
     
-    <p><code>document.body.hasClass('body'); // true or false</code></p>
+    <pre><p><code>document.body.hasClass('body'); // true or false</code></p></pre>
     
     <h4 id="removeClass">removeClass(className)</h4>
     
@@ -218,7 +204,7 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
     
     <h5>Examples</h5>
     
-    <p><code>document.body.removeClass('body'); // true or false</code></p>
+    <pre><p><code>document.body.removeClass('body'); // true or false</code></p></pre>
     
     <h4 id="toggleClass">toggleClass(className)</h4>
     
@@ -226,7 +212,7 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
 
     <h5>Examples</h5>
     
-    <p><code>document.body.toggleClass('body'); // returns the element</code></p>
+    <pre><p><code>document.body.toggleClass('body'); // returns the element</code></p></pre>
 
 </body>
 </html>
