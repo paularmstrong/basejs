@@ -124,19 +124,23 @@ team.each(awesome, team); // applies team.Paul, team.Zach and team.Jesse as true
     <h5>Examples</h5>
     
     
-        <pre><p><code>var obj = {
-    name: 'A nice demo',
-    fx: function() {
-        alert(this.name);
-    }
+        <pre><p><code>var example = function() {
+    this.name = 'My awesome example';
+    setTimeout(function() {
+        alert(this); // alerts &rarr; Window
+        this.sayName(); // error &rarr; window.sayName() is undefined
+    }, 100);
+    setTimeout(function() {
+        alert(this); // alerts &rarr; Object example
+        this.sayName();
+    }.bind(this), 100);
 };
 
-window.name = 'I am such a beautiful window!';
+func.prototype.sayName = function() {
+    alert(this.name); // alerts &rarr; 'My awesome example'
+};
 
-function run(f) { f(); }
-
-run(obj.fx); // window scope alerts &rarr; 'I am such a beautiful window!'
-run(obj.fx.bind(obj)); // obj scope alerts &rarr; 'A nice demo'</code></p></pre>
+var a = new func();</code></p></pre>
     
     
     <h4 id="bindAsEventListener">bindAsEventListener(object[, arguments&hellip;])</h4>
