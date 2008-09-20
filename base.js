@@ -120,7 +120,6 @@ base.extend(Function.prototype, {
      * Override scope of a function.
      */
     bind: function() {
-        console.log('args', arguments[0])
         if (arguments.length < 2 && !arguments[0]) return this;
         var __method = this,  object = arguments[0];
         return function() {
