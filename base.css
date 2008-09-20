@@ -6,7 +6,7 @@ html, body {
 }
 html {
     background-color: #222;
-    background: -webkit-gradient(linear, 0 0, 0 200, from(#111), to(#222)) fixed;
+    background: -webkit-gradient(linear, 0 0, 0 50%, from(#111), to(#222)) fixed;
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, ol {
