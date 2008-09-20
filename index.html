@@ -12,11 +12,15 @@
 </head>
 <body>
     
-    <h1>baseJS Documentation</h1>
+    <div id="intro">
+        <h1>baseJS Documentation</h1>
+        
+    </div>
     
     <div id="nav">
         <h2>API Documentation</h2>
         <ul>
+            <li><a href="#intro">Introduction</a></li>
             <li><a href="#base">base</a></li>
             <li><a href="#Array">Array.prototype, NodeList.prototype</a></li>
             <li><a href="#Function">Function.prototype</a></li>
@@ -27,110 +31,119 @@
     </div>
     
     <!-- base -->
-    <h2 id="base">The <code>base</code> object</h2>
-    
-    <p>Extending objects in a clean and easy-to-read manner is the core of baseJS. At its root is the <code>base</code> object.</p>
-
-    <h3>Available Methods and Properties</h3>
-    <ul>
-        <li><a href="#extend">extend()</a></li>
-        <li><a href="#browser">browser</a></li>
-        <li><a href="#isArray">isArray()</a></li>
-        <li><a href="#toQueryString">toQueryString()</a></li>
-        <li><a href="#fire">fire()</a></li>
-    </ul>
-    
-    <h4 id="extend">extend(destination[, &hellip;], properties)</h4>
-    
-    <h5>Examples</h5>
-    <pre><p><code>var myObject = function(a) { return a*2; }
+    <div>
+        <h2 id="base">base</h2>
+        
+        <p>Extending objects in a clean and easy-to-read manner is the core of baseJS. At its root is the <code>base</code> object.</p>
+        
+        <h3>Available Methods and Properties</h3>
+        <ul>
+            <li><a href="#extend">extend()</a></li>
+            <li><a href="#browser">browser</a></li>
+            <li><a href="#isArray">isArray()</a></li>
+            <li><a href="#toQueryString">toQueryString()</a></li>
+            <li><a href="#fire">fire()</a></li>
+        </ul>
+        
+        <h4 id="extend">extend(destination[, &hellip;], properties)</h4>
+        
+        <h5>Examples</h5>
+        <pre><p><code>var myObject = function(a) { return a*2; }
 base.extend(myObject, { property1: 'Lorem', property2: 'Ipsum' });
 base.extend(myObject.prototype, { method: function() {} });</code></p></pre>
     
-    <p>In this example, we've created an object <var>myObject</var> that returns <samp>a*2</samp>. In the second line, we are assigning a few properties to the <var>myObject</var> variable. In the third line, we see the shortcut for creating multiple methods on <var>myObject.prototype</var>. This shortens the amount of code you will have to write and the verbosity of looking at multiple instance of <code>myObject.prototype.methodName = function() {}</code>.</p>
+        <p>In this example, we've created an object <var>myObject</var> that returns <samp>a*2</samp>. In the second line, we are assigning a few properties to the <var>myObject</var> variable. In the third line, we see the shortcut for creating multiple methods on <var>myObject.prototype</var>. This shortens the amount of code you will have to write and the verbosity of looking at multiple instance of <code>myObject.prototype.methodName = function() {}</code>.</p>
+        
+        <pre><p><code>base.extend(Array.prototype, NodeList.prototype, { method: function() {} });</code></p></pre>
+        
+        <p>Alternatively, you can add an indefinite number of objects to have the last object of properties and methods applied to. In this instance, <code>method()</code> will now be a function available on both <var>Arrays</var> and <var>NodeLists</var>.</p>
+        
+        <h4 id="browser">browser</h4>
+        
+        <h5>Properties</h5>
 
-    <pre><p><code>base.extend(Array.prototype, NodeList.prototype, { method: function() {} });</code></p></pre>
-
-    <p>Alternatively, you can add an indefinite number of objects to have the last object of properties and methods applied to. In this instance, <code>method()</code> will now be a function available on both <var>Arrays</var> and <var>NodeLists</var>.</p>
-    
-    <h4 id="browser">browser</h4>
-    
-    <h5>Properties</h5>
-
-<pre><p><code>base.browser.version // 531. Number browser version, according to the userAgent.
+        <pre><p><code>base.browser.version // 531. Number browser version, according to the userAgent.
 base.browser.webkit // true. Boolean browser is WebKit.
 base.browser.opera // true. Boolean browser is Opera.
 base.browser.msie // true. Boolean browser is Internet Explorer.
 base.browser.mozilla // true. Boolean browser is Mozilla/Firefox.
 base.browser.msafari // true. Boolean browser is Mobile Safari (iPhone and iPod Touch).</code></p></pre>
+        
+        
+        <h4 id="isArray">isArray(object)</h4>
+        
+        <p>Check if an object is an Array. JavaScript does not have any default method for doing this.</p>
+        
+        <h5>Example</h5>
     
-    
-    <h4 id="isArray">isArray(object)</h4>
-    
-    <p>Check if an object is an Array. JavaScript does not have any default method for doing this.</p>
-    
-    <h5>Example</h5>
-    
-    <pre><p><code>var myObj = {}; 
+        <pre><p><code>var myObj = {}; 
 var myArr = [];
 
 Object.isArray(myObj); // returns false
 Object.isArray(myArr); // returns true</code></p></pre>
-    
-    <h4 id="toQueryString">toQueryString(object)</h4>
-    
-    <p>Convert an associative object to a query string for passing as parameters to POST or GET calls.</p>
-    
-    <h5>Example</h5>
-    
-    <pre><p><code>var person = { first_name: 'Paul', last_name: 'Armstrong' };
+        
+        <h4 id="toQueryString">toQueryString(object)</h4>
+        
+        <p>Convert an associative object to a query string for passing as parameters to POST or GET calls.</p>
+        
+        <h5>Example</h5>
+        
+        <pre><p><code>var person = { first_name: 'Paul', last_name: 'Armstrong' };
 Object.toQueryString(person); // "first_name=Paul&amp;last_name=Armstrong"</code></p></pre>
+    </div>
     
-    <!-- ARRAY -->
-    <h2 id="Array">Array.prototype, NodeList.prototype</h2>
+    <hr />
     
-    <h3>Available Methods and Properties</h3>
-    
-    <ul>
-        <li><a href="#eachfx">each()</a></li>
-        <li><a href="#eachAfter">eachAfter()</a></li>
-    </ul>
-    
-    <h4 id="eachfx">each(iterator, context)</h4>
-    
-    <p>Iterate a function over each index inside the Array.</p>
-    
-    <h5>Examples</h5>
-    
-    <pre><p><code>var team = ['Paul', 'Zach', 'Jesse'];<br />
+    <div>
+        <!-- ARRAY -->
+        <h2 id="Array">Array.prototype, NodeList.prototype</h2>
+        
+        <h3>Available Methods and Properties</h3>
+        
+        <ul>
+            <li><a href="#eachfx">each()</a></li>
+            <li><a href="#eachAfter">eachAfter()</a></li>
+        </ul>
+        
+        <h4 id="eachfx">each(iterator, context)</h4>
+        
+        <p>Iterate a function over each index inside the Array.</p>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>var team = ['Paul', 'Zach', 'Jesse'];<br />
 var awesome = function(person) { alert(person); };<br />
 team.each(awesome); // alerts &rarr; 'Paul' then 'Zach' then 'Jesse'</code></p></pre>
-    
-    <pre><p><code>var team = ['Paul', 'Zach', 'Jesse'];
+        
+        <pre><p><code>var team = ['Paul', 'Zach', 'Jesse'];
 var awesome = function(person) { this[person] = true; };
 team.each(awesome, team); // applies team.Paul, team.Zach and team.Jesse as true</code></p></pre>
+        
+        <h4 id="eachAfter">eachAfter(iterator, interval, context)</h4>
+        
+        <p>Same method as <a href="#eachfx">each()</a>, but applies waits over the interval (in milliseconds) to apply to each item in the Array. This is a regular interval method and will prevent your scripts from continuing until it has completed.</p>
+    </div>
     
-    <h4 id="eachAfter">eachAfter(iterator, interval, context)</h4>
+    <hr />
     
-    <p>Same method as <a href="#eachfx">each()</a>, but applies waits over the interval (in milliseconds) to apply to each item in the Array. This is a regular interval method and will prevent your scripts from continuing until it has completed.</p>
+    <div>
+        <!-- FUNCTION -->
+        <h2 id="Function">Function.prototype</h2>
+        
+        <p></p>
+        
+        <h3>Available Methods and Properties</h3>
+        
+        <ul>
+            <li><a href="#bind">bind()</a></li>
+            <li><a href="#bindAsEventListener">bindAsEventListener()</a></li>
+        </ul>
+        
+        <h4 id="bind">bind(object[, arguments&hellip;])</h4>
+        
+        <p>Override the execution scope of a function with <var>object</var> and optionally prepend arguments to the input.</p>
     
-    <!-- FUNCTION -->
-    <h2 id="Function">Function.prototype</h2>
-    
-    <p></p>
-    
-    <h3>Available Methods and Properties</h3>
-    
-    <ul>
-        <li><a href="#bind">bind()</a></li>
-        <li><a href="#bindAsEventListener">bindAsEventListener()</a></li>
-    </ul>
-    
-    <h4 id="bind">bind(object[, arguments&hellip;])</h4>
-    
-    <p>Override the execution scope of a function with <var>object</var> and optionally prepend arguments to the input.</p>
-    
-    <h5>Examples</h5>
+        <h5>Examples</h5>
     
     
         <pre><p><code>var example = function() {
@@ -150,13 +163,13 @@ func.prototype.sayName = function() {
 };
 
 var a = new func();</code></p></pre>
-    
-    
-    <h4 id="bindAsEventListener">bindAsEventListener(object[, arguments&hellip;])</h4>
-    
-    <p><a href="#bind">Binding method</a> specific for Event Listener callbacks.</p>
-    
-    <h5>Examples</h5>
+        
+        
+        <h4 id="bindAsEventListener">bindAsEventListener(object[, arguments&hellip;])</h4>
+        
+        <p><a href="#bind">Binding method</a> specific for Event Listener callbacks.</p>
+        
+        <h5>Examples</h5>
     
     
         <pre><p><code>var obj = { name: 'A nice demo' };
@@ -167,65 +180,74 @@ function handler(event) {
 
 document.body.addEventListener('click', handler.bindAsEventListener(obj));
 // Now any click on the page alerts obj.name</code></p></pre>
+    </div>
     
+    <hr />
     
-    <h2 id="Element">Element</h2>
-    
-    <h3>Available Methods and Properties</h3>
-    
-    <ul>
-        <li><a href="#Element">Element()</a></li>
-    </ul>
-    
-    <h4 id="Element">Element(type[, atts, content])</h4>
-    
-    <p>A helper method for quickly creating new HTMLElements with attributes.</p>
-    
-    <h5>Examples</h5>
-    
-    <pre><p><code>new Element('a', { class: 'topLink', href: '#top' }, 'Back to Top');
+    <div>
+        <!-- Element -->
+        <h2 id="Element">Element</h2>
+        
+        <h3>Available Methods and Properties</h3>
+        
+        <ul>
+            <li><a href="#Element">Element()</a></li>
+        </ul>
+        
+        <h4 id="Element">Element(type[, atts, content])</h4>
+        
+        <p>A helper method for quickly creating new HTMLElements with attributes.</p>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>new Element('a', { class: 'topLink', href: '#top' }, 'Back to Top');
 // Returns the HTMLElement &lt;a class="topLink" href="#top"&gt;Back to Top&lt;/a&gt;</code></p></pre>
+    </div>
     
-    <h2 id="HTMLElement">HTMLElement.prototype</h2>
+    <hr />
     
-    <h3>Available Methods and Properties</h3>
-    
-    <ul>
-        <li><a href="#addClass">addClass()</a></li>
-        <li><a href="#hasClass">hasClass()</a></li>
-        <li><a href="#removeClass">removeClass()</a></li>
-        <li><a href="#toggleClass">toggleClass()</a></li>
-        <li><a href="#getXY">getXY()</a></li>
-        <li><a href="#HTMLElement-fire">fire()</a></li>
-    </ul>
-    
-    <h4 id="addClass">addClass(className)</h4>
-    
-    <h5>Examples</h5>
-    
-    <pre><p><code>document.body.addClass('body'); // &lt;body class="body"&gt;</code></p></pre>
-    
-    <h4 id="hasClass">hasClass(className)</h4>
-    
-    <h5>Examples</h5>
-    
-    <pre><p><code>document.body.hasClass('body'); // true or false</code></p></pre>
-    
-    <h4 id="removeClass">removeClass(className)</h4>
-    
-    <p>Safely remove a <var>className</var> from the HTMLElement by checking surrounding whitespace and/or the beginning and end of the class attribute.</p>
-    
-    <h5>Examples</h5>
-    
-    <pre><p><code>document.body.removeClass('body'); // true or false</code></p></pre>
-    
-    <h4 id="toggleClass">toggleClass(className)</h4>
-    
-    <p>If the HTMLElement has the specified <var>className</var>, remove it, otherwise add it.</p>
-
-    <h5>Examples</h5>
-    
-    <pre><p><code>document.body.toggleClass('body'); // returns the element</code></p></pre>
-
+    <div>
+        <!-- HTMLElement -->
+        <h2 id="HTMLElement">HTMLElement.prototype</h2>
+        
+        <h3>Available Methods and Properties</h3>
+        
+        <ul>
+            <li><a href="#addClass">addClass()</a></li>
+            <li><a href="#hasClass">hasClass()</a></li>
+            <li><a href="#removeClass">removeClass()</a></li>
+            <li><a href="#toggleClass">toggleClass()</a></li>
+            <li><a href="#getXY">getXY()</a></li>
+            <li><a href="#HTMLElement-fire">fire()</a></li>
+        </ul>
+        
+        <h4 id="addClass">addClass(className)</h4>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>document.body.addClass('body'); // &lt;body class="body"&gt;</code></p></pre>
+        
+        <h4 id="hasClass">hasClass(className)</h4>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>document.body.hasClass('body'); // true or false</code></p></pre>
+        
+        <h4 id="removeClass">removeClass(className)</h4>
+        
+        <p>Safely remove a <var>className</var> from the HTMLElement by checking surrounding whitespace and/or the beginning and end of the class attribute.</p>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>document.body.removeClass('body'); // true or false</code></p></pre>
+        
+        <h4 id="toggleClass">toggleClass(className)</h4>
+        
+        <p>If the HTMLElement has the specified <var>className</var>, remove it, otherwise add it.</p>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>document.body.toggleClass('body'); // returns the element</code></p></pre>
+    </div>
 </body>
 </html>

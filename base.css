@@ -34,6 +34,13 @@ a:hover {
     color: #222;
 }
 
+hr {
+    margin: 60px 40px;
+    border-color: transparent;
+    border-top-color: #000;
+    border-bottom-color: #333;
+}
+
 pre {
     padding: 20px;
     background: #000;
@@ -67,14 +74,21 @@ div#nav {
 div#nav h2 {
     font-size: 12px;
     height: 22px;
-    margin-bottom: 2px;
-    border-bottom: 1px dotted #444;
+    margin-bottom: 0;
+    border-bottom: 1px solid #111;
 }
 div#nav ul {
+    border-top: 1px solid #555;
     margin: 0; padding: 0;
     list-style-type: none;
 }
 div#nav ul a {
     display: block;
     width: 200px;
+}
+div#nav ul li ul {
+    padding: 0 0 0 20px;
+}
+div#nav ul li ul a {
+    width: 180px;
 }

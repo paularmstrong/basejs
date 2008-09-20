@@ -19,7 +19,8 @@ var userAgent = navigator.userAgent.toLowerCase();
 var base = {
     /**
      * Add properties to an object
-     * @param arguments Last argument is the object of properties or methods to apply to the all preceding parameters.
+     * @param arguments         Last argument is the object of properties or methods 
+     *                          to apply to the all preceding parameters.
      */
     extend: function() {
         function ext(destination, source) {
@@ -78,15 +79,7 @@ var base = {
      
         element.dispatchEvent(event);
     },
-    toArray: function(iterable) {
-        if(!iterable) { return []; }
-        var i = iterable.length;
-        var result = [];
-        for(var e = 0; e < i; e++) {
-            result.push(iterable[e]);
-        }
-        return result;
-    }
+    selectors: false
 };
 
 base.extend(Array.prototype, NodeList.prototype, {
@@ -492,6 +485,7 @@ base.extend(document, {
     if(typeof document.querySelectorAll === 'function') {
         window.$ = function(selector, context) {
             context = (!!context) ? context : document;
+            base.selectors = true;
             return context.querySelectorAll(selector);
         }
     } else {
