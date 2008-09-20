@@ -19,14 +19,21 @@ var userAgent = navigator.userAgent.toLowerCase();
 var base = {
     /**
      * Add properties to an object
-     * @param destination   {object}        The object to add the property to.
-     * @param source        {object}        Object of keys and values to add to the destination.
+     * @param arguments Last argument is the object of properties or methods to apply to the all preceding parameters.
      */
-    extend: function(destination, source) {
-        for(var property in source) {
-            destination[property] = source[property];
+    extend: function() {
+        function ext(destination, source) {
+            for(var property in source) {
+                destination[property] = source[property];
+            }
         }
-        return destination;
+        if(arguments.length == 2) {
+            ext(arguments[0], arguments[1])
+        } else {
+            var l = arguments.length;
+            var i = l-1;
+            while(i--) { ext(arguments[i], arguments[l-1]); }
+        }
     },
     /**
      * Convenience browser checking. Thanks to prototype && jquery.
@@ -39,10 +46,7 @@ var base = {
     	msie: /msie/.test(userAgent) && !/opera/.test(userAgent), // not supported yet
     	mozilla: /mozilla/.test(userAgent) && !/(compatible|webkit)/.test(userAgent),
         msafari: /apple.*mobile.*safari/.test(userAgent)
-    }
-};
-
-base.extend(Object, {
+    },
     /**
      * Check if the object is an array instance.
      */
@@ -56,7 +60,7 @@ base.extend(Object, {
         var params = [];
         for(var key in object) {
             var str = encodeURIComponent(key)+'=';
-            var value = (Object.isArray(object[key])) ? object[key].join(',') : object[key];
+            var value = (base.isArray(object[key])) ? object[key].join(',') : object[key];
             str += encodeURIComponent(value);
             params.push(str)
         }
@@ -73,10 +77,19 @@ base.extend(Object, {
         event.memo = memo || {};
      
         element.dispatchEvent(event);
+    },
+    toArray: function(iterable) {
+        if(!iterable) { return []; }
+        var i = iterable.length;
+        var result = [];
+        for(var e = 0; e < i; e++) {
+            result.push(iterable[e]);
+        }
+        return result;
     }
-});
+};
 
-base.extend(Array.prototype, {
+base.extend(Array.prototype, NodeList.prototype, {
     /**
      * Run a function on each item in the array
      * @param iterator      {function}      Function to run on each object key
@@ -188,7 +201,7 @@ base.extend(Ajax, {
             this.transport.onreadystatechange = this._onStateChange.bind(this);
             this._setRequestHeaders();
 
-            var params = Object.toQueryString(this.options.params);
+            var params = base.toQueryString(this.options.params);
 
             this._body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
             this.transport.send(this._body);
@@ -422,15 +435,14 @@ base.extend(HTMLElement.prototype, {
         return offset;
     },
     fire: function(eventName, memo) {
-        Object._fire(this, eventName, memo);
+        base._fire(this, eventName, memo);
     }
 });
-
 
 base.extend(document, { 
     loaded: false,
     fire: function(eventName, memo) {
-        Object._fire(this, eventName, memo);
+        base._fire(this, eventName, memo);
     }
 });
 
