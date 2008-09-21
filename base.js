@@ -312,10 +312,10 @@ var Template = function(template) {
 base.extend(Template.prototype, {
     /**
      * Parse the data object into the template, replacing #{key} with key values.
-     * @param data      {object}        Key/value pairs to parse into the template object.
+     * @param object    {object}        Key/value pairs to parse into the template object.
      */
-    parse: function(data) {
-        this.data = data;
+    parse: function(object) {
+        this.data = object;
         // match every instance of #{key} and replace it with what's in the data object
         this.output = this.output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
         return this.output;
@@ -433,7 +433,7 @@ base.extend(HTMLElement.prototype, {
 });
 
 base.extend(document, { 
-    loaded: false,
+    _loaded: false,
     fire: function(eventName, memo) {
         base._fire(this, eventName, memo);
     }
@@ -454,11 +454,11 @@ base.extend(document, {
     // fire the custom dom:loaded event
     var timer;
     function fireContentLoaded() {
-        if(!document.loaded) {
+        if(!document._loaded) {
             if(timer) { window.clearInterval(timer); }
         }
         document.fire('dom:loaded');
-        document.loaded = true;
+        document._loaded = true;
     }
 
     if(
