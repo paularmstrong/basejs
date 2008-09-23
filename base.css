@@ -21,14 +21,6 @@ h3 { font-size: 20px; }
 h4 { font-size: 18px; }
 h5, h6 { font-size: 14px; color: #888; }
 
-pre {
-    font-family: Monaco, Courier, "Courier New", monospace;
-    font-size: 13px;
-}
-pre p:last-child {
-    margin-bottom: 0;
-}
-
 ::selection {
     background-color: rgba(180,200,255,0.5);
 }
@@ -54,6 +46,7 @@ hr {
 }
 
 pre {
+    font-family: Monaco, Courier, "Courier New", monospace;
     padding: 20px;
     background: #CCC;
     -webkit-border-radius: 4px;
@@ -64,6 +57,9 @@ pre {
     border-left-color: #AAA;
     border-right-color: #DDD;
     overflow: auto;
+}
+pre p:last-child {
+    margin-bottom: 0;
 }
 
 div#nav {

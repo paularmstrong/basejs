@@ -37,6 +37,7 @@ var navItem = function(el) {
 
 var docFxs = function() {
     this.navigation = new navigation();
+    sh_highlightDocument();
 };
 
 
