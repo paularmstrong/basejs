@@ -26,7 +26,6 @@ pre {
     font-size: 13px;
 }
 
-
 ::selection {
     background-color: rgba(180,200,255,0.5);
 }
@@ -72,7 +71,7 @@ div#nav {
     padding: 44px 10px 20px 10px;
     width: 200px;
     overflow: auto;
-    background: #444;
+    background: #080808;
     background: -webkit-gradient(linear, 0 0, 0 50%, from(#444), to(#080808)) fixed;
     -webkit-box-shadow: rgba(0,0,0,0.3) 3px 3px 4px;
     -moz-box-shadow: rgba(0,0,0,0.3) 2px 2px 4px;
@@ -110,3 +109,27 @@ div#nav ul li ul {
 div#nav ul li ul a {
     width: 170px;
 }
+
+ul.methods {
+    background: #080808;
+    background: -webkit-gradient(linear, 0 0, 0 60%, from(#444), to(#080808));
+    -webkit-box-shadow: rgba(0,0,0,0.3) 2px 2px 4px;
+    -moz-box-shadow: rgba(0,0,0,0.3) 2px 2px 4px;
+    box-shadow: rgba(0,0,0,0.3) 2px 2px 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    list-style-type: none;
+    padding: 4px;
+}
+ul.methods li { 
+    display: inline; 
+    color: #FFF;
+}
+ul.methods li::after {
+    content: ', ';
+}
+ul.methods li:last-child::after {
+    content: '';
+}
+

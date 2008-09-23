@@ -16,15 +16,14 @@ base.extend(navigation.prototype, {
         var subNav = $('ul', container)[0];
         if(subNav.parentNode == $('#nav')[0]) { return; }
         
-        var list = new Element('ul', {}, subNav.innerHTML);
+        this.currentlist = new Element('ul', {}, subNav.innerHTML);
 
-        e.target.parentNode.appendChild(list);
+        e.target.parentNode.appendChild(this.currentlist);
     },
     removeOldNavs: function() {
-        var navs = $('#nav ul ul');
-        navs.each(function(sub) {
-            sub.parentNode.removeChild(sub);
-        });
+        if(!!this.currentlist) {
+            this.currentlist.parentNode.removeChild(this.currentlist);
+        }
     }
 });
 
