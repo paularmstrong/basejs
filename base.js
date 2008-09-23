@@ -126,21 +126,21 @@ base.extend(Function.prototype, {
      * Override scope of a function.
      */
     bind: function() {
-        if (arguments.length < 2 && !arguments[0]) return this;
-        var __method = this,  object = arguments[0];
-        return function() {
-            return __method.apply(object, arguments);
-        }
+		var method = this, args = Array.prototype.slice.call(arguments), object = args.shift();
+		return function() {
+			return method.apply(object, args.concat(Array.prototype.slice.call(arguments)));
+		}
     },
     /**
      * Override scope of a callback function on an event.
      */
     bindAsEventListener: function() {
-        var __method = this, object = arguments[0];
+        var method = this, args = Array.prototype.slice.call(arguments), object = args.shift();
         return function(event) {
-            return __method.apply(object, [event || window.event].concat(arguments));
+            return method.apply(object, [event || window.event].concat(Array.prototype.slice.call(arguments)));
         }
-    }});
+    }
+});
 
 var Ajax = function(options) {
     this.options = {
