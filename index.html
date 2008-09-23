@@ -227,6 +227,17 @@ document.addEventListener('dom:loaded', myPreRenderFxn, true);</code></p></pre>
         <h5>Examples</h5>
         
         <pre><p><code>document.body.toggleClass('body'); // returns the element</code></p></pre>
+        
+        <h4 id="getXY">getXY()</h4>
+        
+        <p>Simplified get X and Y position of an element on a page. Does not compute from within scrolled elements.</p>
+        
+        <h5>Examples</h5>
+        
+        <pre><p><code>var nav = document.getElementById('nav');
+alert(nav.getXY()); // alerts Array &rarr; [xPosition, yPosition]
+alert(nav.getXY().x); // alerts &rarr; xPosition
+alert(nav.getXY().y); // alerts &rarr; yPosition</code></p></pre>
 
 
         <h4 id="HTMLElement-fire">fire(eventName[, memo])</h4>

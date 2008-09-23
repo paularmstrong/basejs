@@ -64,24 +64,16 @@ pre {
     overflow: auto;
 }
 
-h2[id]:hover, h3[id]:hover, h4[id]:hover, h5[id]:hover, h6[id]:hover {
-    cursor: pointer;
-}
-h2[id]:hover::after, h3[id]:hover::after, h4[id]:hover::after, h5[id]:hover::after, h6[id]:hover::after {
-    content: ' #';
-}
-
 div#nav {
     position: fixed;
-    left: -4px;
+    left: 0;
     top: -4px;
-    padding: 44px 10px 20px 14px;
+    bottom: 0;
+    padding: 44px 10px 20px 10px;
     width: 200px;
+    overflow: auto;
     background: #444;
-    background: -webkit-gradient(linear, 0 0, 0 50%, from(#444), to(#000)) fixed;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    background: -webkit-gradient(linear, 0 0, 0 50%, from(#444), to(#080808)) fixed;
     -webkit-box-shadow: rgba(0,0,0,0.3) 3px 3px 4px;
     -moz-box-shadow: rgba(0,0,0,0.3) 2px 2px 4px;
     box-shadow: rgba(0,0,0,0.3) 2px 2px 4px;
@@ -104,8 +96,17 @@ div#nav ul a {
     width: 196px;
 }
 div#nav ul li ul {
-    padding: 0 0 0 20px;
+    padding: 2px;
+    margin: 0 10px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-top-color: rgba(255,255,255,0.1);
+    border-left-color: rgba(255,255,255,0.2);
+    border-right-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.1);
 }
 div#nav ul li ul a {
-    width: 176px;
+    width: 170px;
 }
