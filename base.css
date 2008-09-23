@@ -25,6 +25,9 @@ pre {
     font-family: Monaco, Courier, "Courier New", monospace;
     font-size: 13px;
 }
+pre p:last-child {
+    margin-bottom: 0;
+}
 
 ::selection {
     background-color: rgba(180,200,255,0.5);
