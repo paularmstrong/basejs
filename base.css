@@ -68,10 +68,8 @@ pre {
 
 div#nav {
     position: fixed;
-    left: 0;
-    top: -4px;
-    bottom: 0;
-    padding: 44px 10px 20px 10px;
+    left: 0; top: 0; bottom: 0;
+    padding: 40px 10px 20px 10px;
     width: 200px;
     overflow: auto;
     background: #080808;

@@ -31,9 +31,8 @@ var base = {
         if(arguments.length == 2) {
             ext(arguments[0], arguments[1])
         } else {
-            var l = arguments.length;
-            var i = l-1;
-            while(i--) { ext(arguments[i], arguments[l-1]); }
+            var l = arguments.length, src = arguments[l-1], i = l-1;
+            while(i--) { ext(arguments[i], src); }
         }
     },
     /**
