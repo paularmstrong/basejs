@@ -5,8 +5,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>baseJS</title>
     
-    <script src="shjs.js" type="text/javascript" charset="utf-8"></script>
-    <script src="sh_javascript.js" type="text/javascript" charset="utf-8"></script>
+    <script src="shjs.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="base.js" type="text/javascript" charset="utf-8"></script>
     <script src="docs.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="base.css" type="text/css" media="all" />
@@ -29,7 +28,11 @@
             <li><a href="#HTMLElement">HTMLElement</a></li>
             <li><a href="#String">String</a></li>
             <li><a href="#Template">Template</a></li>
-            
+            <li><a href="#Utility">Utility</a></li>
+        </ul>
+        
+        <ul>
+            <li><a href="#license">License</a></li>
         </ul>
     </div>
     
@@ -396,6 +399,39 @@ var person2 = { name: 'Janey', age: '23' };
 myTemplate.parse(person1); // returns &rarr; 'Jimmy is 22 years old.'
 myTemplate.parse(person2); // returns &rarr; 'Janey is 23 years old.'</code></p></pre>
         
+    </div>
+    
+    <hr />
+    
+    <div>
+        <h2 id="Utility">Utility Methods</h2>
+        
+        <p></p>
+        
+        <h3>Available Methods and Properties</h3>
+        
+        <ul class="methods">
+            <li><a href="#dollar">$()</a></li>
+        </ul>
+        
+        <h4 id="dollar">$(selector[, context])</h4>
+        
+        <p>Use CSS selectors to get an Array or NodeList of elements in the document or context, if provided.</p>
+        
+        <h5>Examples</h5>
+        
+        <pre class="sh_javascript"><code><p>var header = $('#header')[0]; // Selects the first object on the page with ID 'header'
+var awesome = $('div.awesome', header); // Selects every instance of &lt;div class="awesome"&gt;&lt;/div&gt; in #header</p></code></pre>
+
+        <p>From this point, it's possible to run the <a href="#Array">Array &amp; NodeList</a> methods on the variable <var>awesome</var>.</p>
+    </div>
+    
+    <hr />
+    
+    <div>
+        <h2 id="license">License</h2>
+
+        <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="http://creativecommons.org/images/public/somerights20.png" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" property="dc:title">baseJS</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://paularmstrongdesigns.com/projects/basejs" property="cc:attributionName" rel="cc:attributionURL">Paul Armstrong</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative Commons Attribution-Share Alike 3.0 United States License</a>.<br />Based on a work at <a xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://paularmstrongdesigns.com/projects/basejs" rel="dc:source">paularmstrongdesigns.com</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="http://paularmstrongdesigns.com/projects/basejs" rel="cc:morePermissions">http://paularmstrongdesigns.com/projects/basejs</a>.
     </div>
 </body>
 </html>

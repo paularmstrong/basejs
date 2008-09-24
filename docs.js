@@ -12,16 +12,18 @@ var navigation = function() {
 base.extend(navigation.prototype, {
     addSubNav: function(e) {
         var id = e.target.href.match(/#\S+$/)+'';
-        var container = $(id)[0].parentNode;
+        var target = $(id);
+        var container = target[0].parentNode;
+        
         var subNav = $('ul', container)[0];
-        if(subNav.parentNode == $('#nav')[0]) { return; }
+        if(!subNav || subNav.parentNode == $('#nav')[0]) { return; }
         
         this.currentlist = new Element('ul', {}, subNav.innerHTML);
-
+        
         e.target.parentNode.appendChild(this.currentlist);
     },
     removeOldNavs: function() {
-        if(!!this.currentlist) {
+        if(!!this.currentlist && !!this.currentlist.parentNode) {
             this.currentlist.parentNode.removeChild(this.currentlist);
         }
     }

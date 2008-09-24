@@ -6,7 +6,7 @@
  * Everything also is tested and works in Firefox 2+.
  *
  * Many of the methods and ideals in this document have been taken from Prototype, jQuery, and YUI.
- * License information coming sometime.
+ * License d under the Creative Commons Attribution-ShareAlike 3.0 United States.
  *
  * Written by Paul Armstrong
  * Contact: paul@paularmstrongdesigns.com
