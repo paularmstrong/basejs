@@ -271,7 +271,11 @@ base.extend(Ajax.Response.prototype, {
     			return this.evalJSON();
     		break;
     		case 'object':
-    			return eval('('+this.response.responseText+')');
+    		    try {
+        			return eval('('+this.response.responseText+')');
+    		    } catch(e) {
+    		        throw new SyntaxError('Returned object is invalid.');
+    		    }
     		break;
     		case 'text':
     		    return this.response.responseText;
@@ -305,7 +309,6 @@ base.extend(Ajax.Response.prototype, {
  */
 var Template = function(template) {
     this.template = template;
-    this.output = this.template;
     return this.template;
 }
 base.extend(Template.prototype, {
@@ -315,9 +318,10 @@ base.extend(Template.prototype, {
      */
     parse: function(object) {
         this.data = object;
+        var output = this.template;
         // match every instance of #{key} and replace it with what's in the data object
-        this.output = this.output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
-        return this.output;
+        output = output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
+        return output;
     },
     /**
      * Private method for parsing the template.
