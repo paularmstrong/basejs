@@ -305,7 +305,7 @@ base.extend(Ajax.Response.prototype, {
 
 /**
  * HTML Templates that can be filled with object data.
- * @param template  {string}        The HTML markup that will be used for the template.
+ * @param template  {string}        The markup that will be used for the template.
  */
 var Template = function(template) {
     this.template = template;
@@ -356,6 +356,14 @@ base.extend(String.prototype, {
      */
     blank: function() {
         return /^\s*$/.test(this);
+    },
+    /**
+     * Convert a string into an HTML NodeList
+     */
+    toHTML: function() {
+        var div = document.createElement('div');
+        div.innerHTML = this;
+        return div.childNodes;
     },
     /**
      * trim trailing whitespace or custom match from a string
