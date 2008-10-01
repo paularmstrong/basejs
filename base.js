@@ -78,6 +78,10 @@ var base = {
      
         element.dispatchEvent(event);
     },
+    stopEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    },
     selectors: false
 };
 
@@ -101,19 +105,29 @@ base.extend(Array.prototype, NodeList.prototype, {
      * Run a function on each item in the array after a specified interval
      * @param iterator      {function}      Function to run on each object key
      * @param interval      {Number}        Number of milliseconds before each iteration is run (default 1000)
+     * @param dir           {Number}        -1, 1 or null. Negative gives reverse iteration. (optional)
      * @param context       {object}        Scope override (optional)
+     * @param callback      {function}      Function to fire after each item has been iterated. (optional)
      */
-    eachAfter: function(iterator, interval, context) {
+    eachAfter: function(iterator, interval, dir, context, callback) {
         iterator = iterator.bind(context);
+        callback = callback || function() {};
+        var dir = dir || 1;
         var c = this.length, i = 0;
+        if(dir < 0) {
+            var t = c;
+            c = i;
+            i = (t == 0) ? 0 : t-1;
+        }
         try {
             var eachIterator = setInterval(function() {
                 if(i === c) { 
+                    if(callback) { callback(); }
                     clearInterval(eachIterator);
                     return this;
                 } else {
                     iterator(this[i]);
-                    i++;
+                    i = i+dir;
                 }
             }.bind(this), (interval || 1000));
         } catch(e) { throw e; }
@@ -318,10 +332,10 @@ base.extend(Template.prototype, {
      */
     parse: function(object) {
         this.data = object;
-        var output = this.template;
+        this.output = this.template;
         // match every instance of #{key} and replace it with what's in the data object
-        output = output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
-        return output;
+        this.output = this.output.replace(/#\{(\w+)\}/g, this._replaceCallback.bind(this));
+        return this.output;
     },
     /**
      * Private method for parsing the template.
@@ -461,57 +475,58 @@ base.extend(document, {
  * @param selector  {string}        CSS query of selectors.
  * @param context   {HTMLElement}   Context for the query. Limits scope of query.
  */
-(function() {
-    // fire the custom dom:loaded event
-    var timer;
-    function fireContentLoaded() {
-        if(!document._loaded) {
-            if(timer) { window.clearInterval(timer); }
-        }
-        document.fire('dom:loaded');
-        document._loaded = true;
-    }
+ (function() {
+     // fire the custom dom:loaded event
+     var timer;
+     function fireContentLoaded() {
+         if(!document._loaded) {
+             if(timer) { window.clearInterval(timer); }
+         }
+         document.fire('dom:loaded');
+         document._loaded = true;
+     }
 
-    if(
-        base.browser.webkit && 
-        parseInt(base.browser.version) < 525
-    ) {
-        console.info('DOMContentLoaded not available. Falling back on document.readyState.')
-        timer = window.setInterval(function() {
-            if(/loaded|complete/.test(document.readyState)) {
-                fireContentLoaded();
-            }
-        }, 0);
-    } else {
-        document.addEventListener('DOMContentLoaded', fireContentLoaded, false); 
-    }
-    
-    // make any failed console calls silent
-    if(typeof console !== 'object') {
-        console = { 
-            log: function() {}, alert: function() {}, warn: function() {}, info: function() {},
-            time: function() {}, timeEnd: function() {}, error: function() {}
-        };
-    }
-    if(typeof document.querySelectorAll === 'function') {
-        window.$ = function(selector, context) {
-            context = (!!context) ? context : document;
-            base.selectors = true;
-            return context.querySelectorAll(selector);
-        }
-    } else {
-        // note that at this time, Sizzle is not Internet Explorer compatible
-        console.warn('Selectors API not available. Falling back on Sizzle query selector.');
-        new Ajax.Request('sizzle.min.js', {
-            method: 'get',
-            format: 'text',
-            onSuccess: function(o) {
-                eval(o); // FF2,FF3 < 10ms
-                // $(selector) is now available
-            },
-            onFailure: function(o) {
-                console.error('Horrible failure getting Sizzle. That sucks.')
-            }
-        });
-    }
-})();
+     // make any failed console calls silent
+     if(typeof console !== 'object') {
+         console = { 
+             log: function() {}, alert: function() {}, warn: function() {}, info: function() {},
+             time: function() {}, timeEnd: function() {}, error: function() {}
+         };
+     }
+     if(typeof document.querySelectorAll === 'function') {
+         window.$ = function(selector, context) {
+             context = (!!context) ? context : document;
+             base.selectors = true;
+             return context.querySelectorAll(selector);
+         }
+         document.addEventListener('DOMContentLoaded', fireContentLoaded, false); 
+
+     } else {
+         // note that at this time, Sizzle is not Internet Explorer compatible
+         console.warn('Selectors API not available. Falling back on Sizzle query selector.');
+         new Ajax.Request('/js/sizzle.min.js', {
+             method: 'get',
+             format: 'text',
+             onSuccess: function(o) {
+                 eval(o); // FF2,FF3 < 10ms
+                 // $(selector) is now available
+                 if(
+                     base.browser.webkit && 
+                     parseInt(base.browser.version) < 525
+                 ) {
+                     console.info('DOMContentLoaded not available. Falling back on document.readyState.')
+                     timer = window.setInterval(function() {
+                         if(/loaded|complete/.test(document.readyState)) {
+                             fireContentLoaded();
+                         }
+                     }, 0);
+                 } else {
+                     document.addEventListener('DOMContentLoaded', fireContentLoaded, false); 
+                 }
+             },
+             onFailure: function(o) {
+                 console.error('Horrible failure getting Sizzle. That sucks.')
+             }
+         });
+     }
+ })();
