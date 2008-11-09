@@ -493,7 +493,7 @@ base.extend(document, {
              time: function() {}, timeEnd: function() {}, error: function() {}
          };
      }
-     if(typeof document.querySelectorAll !== 'function') {
+     if(typeof document.querySelectorAll === 'function') {
          window.$ = function(selector, context) {
              context = (!!context) ? context : document;
              base.selectors = true;
