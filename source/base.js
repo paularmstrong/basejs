@@ -92,7 +92,7 @@ base.extend(Array.prototype, NodeList.prototype, {
      * @param context       {object}        Scope override (optional)
      */
     each: function(iterator, context) {
-        iterator = iterator.bind(context);
+        iterator = (context) ? iterator.bind(context) : iterator;
         try {
             var c = this.length, i = 0;
             while(i<c) { 
@@ -493,7 +493,7 @@ base.extend(document, {
              time: function() {}, timeEnd: function() {}, error: function() {}
          };
      }
-     if(typeof document.querySelectorAll === 'function') {
+     if(typeof document.querySelectorAll !== 'function') {
          window.$ = function(selector, context) {
              context = (!!context) ? context : document;
              base.selectors = true;
@@ -504,10 +504,11 @@ base.extend(document, {
      } else {
          // note that at this time, Sizzle is not Internet Explorer compatible
          console.warn('Selectors API not available. Falling back on Sizzle query selector.');
-         new Ajax.Request('/js/sizzle.min.js', {
+         new Ajax.Request('../source/sizzle.min.js', {
              method: 'get',
              format: 'text',
              onSuccess: function(o) {
+                 o += 'window.$ = Sizzle';
                  eval(o); // FF2,FF3 < 10ms
                  // $(selector) is now available
                  if(

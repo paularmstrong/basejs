@@ -6,7 +6,7 @@
     <title>baseJS</title>
     
     <script src="shjs.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/base.js" type="text/javascript" charset="utf-8"></script>
     <script src="docs.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="base.css" type="text/css" media="all" />
     <link rel="stylesheet" href="shjs.css" type="text/css" media="all" />
@@ -53,9 +53,9 @@
         <h4 id="extend">extend(destination[, &hellip;], properties)</h4>
         
         <h5>Examples</h5>
-        <pre class="sh_javascript"><pre class="sh_javascript"><code>var myObject = function(a) { return a*2; }
+        <pre class="sh_javascript"><code>var myObject = function(a) { return a*2; }
 base.extend(myObject, { property1: 'Lorem', property2: 'Ipsum' });
-base.extend(myObject.prototype, { method: function() {} });</code></pre></pre>
+base.extend(myObject.prototype, { method: function() {} });</code></pre>
     
         <p>In this example, we've created an object <var>myObject</var> that returns <samp>a*2</samp>. In the second line, we are assigning a few properties to the <var>myObject</var> variable. In the third line, we see the shortcut for creating multiple methods on <var>myObject.prototype</var>. This shortens the amount of code you will have to write and the verbosity of looking at multiple instance of <code>myObject.prototype.methodName = function() {}</code>.</p>
         
@@ -84,8 +84,8 @@ base.browser.msafari // true. Boolean browser is Mobile Safari (iPhone and iPod 
         <pre class="sh_javascript"><p><code>var myObj = {}; 
 var myArr = [];
 
-Object.isArray(myObj); // returns false
-Object.isArray(myArr); // returns true</code></p></pre>
+base.isArray(myObj); // returns false
+base.isArray(myArr); // returns true</code></p></pre>
         
         <h4 id="toQueryString">toQueryString(object)</h4>
         
@@ -94,7 +94,7 @@ Object.isArray(myArr); // returns true</code></p></pre>
         <h5>Example</h5>
         
         <pre class="sh_javascript"><p><code>var person = { first_name: 'Paul', last_name: 'Armstrong' };
-Object.toQueryString(person); // "first_name=Paul&amp;last_name=Armstrong"</code></p></pre>
+base.toQueryString(person); // "first_name=Paul&amp;last_name=Armstrong"</code></p></pre>
     </div>
     
     <hr />
@@ -299,11 +299,11 @@ myElement.fire('myHtmlEvent');</code></p></pre>
     }.bind(this), 100);
 };
 
-func.prototype.sayName = function() {
+example.prototype.sayName = function() {
     alert(this.name); // alerts &rarr; 'My awesome example'
 };
 
-var a = new func();</code></p></pre>
+var a = new example();</code></p></pre>
 
 
     <h4 id="bindAsEventListener">bindAsEventListener(object[, arguments&hellip;])</h4>
