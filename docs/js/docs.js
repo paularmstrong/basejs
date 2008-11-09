@@ -42,5 +42,4 @@ var docFxs = function() {
     sh_highlightDocument();
 };
 
-
 document.addEventListener('dom:loaded', function() { docFxs.instance = new docFxs(); }, true);

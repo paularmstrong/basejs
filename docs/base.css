@@ -62,6 +62,42 @@ pre p:last-child {
     margin-bottom: 0;
 }
 
+ul {
+    list-style-type: square;
+    padding-left: 20px;
+}
+ul li pre {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+    table th, table td {
+        text-align: left;
+        border: 1px solid #999;
+        border-top-color: #CCC;
+        border-left-color: #CCC;
+        border-right-color: #AAA;
+        padding: 5px;
+    }
+    table tr:hover th {
+        background: #39F;
+        color: #FFF;
+    }
+    table tr:hover td {
+        background: #CCC;
+    }
+    
+
+
 div#nav {
     position: fixed;
     left: 0; top: 0; bottom: 0;
@@ -129,4 +165,3 @@ ul.methods li::after {
 ul.methods li:last-child::after {
     content: '';
 }
-
