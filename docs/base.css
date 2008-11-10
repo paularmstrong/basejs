@@ -88,13 +88,20 @@ table {
         border-right-color: #AAA;
         padding: 5px;
     }
-    table tr:hover th {
-        background: #39F;
-        color: #FFF;
+    table thead th {
+        background: #BBB;
+        padding: 0 5px;
     }
-    table tr:hover td {
-        background: #CCC;
+    table tbody th {
+        width: 20%;
     }
+        table tbody tr:hover th {
+            background: #39F;
+            color: #FFF;
+        }
+        table tr:hover td {
+            background: #CCC;
+        }
     
 
 

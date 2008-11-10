@@ -13,6 +13,8 @@
  * Site: http://paularmstrongdesigns.com/projects/basejs
  *
  * Internal methods and properties start with an underscore. You probably shouldn't use them.
+ *
+ * Build Date 2008-11-09 @ 21:02:56
  */
  
 var userAgent = navigator.userAgent.toLowerCase();
@@ -43,7 +45,7 @@ var base = {
     	version: (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [])[1],
     	webkit: /webkit/.test(userAgent),
     	opera: /opera/.test(userAgent), // untested
-    	msie: /msie/.test(userAgent) && !/opera/.test(userAgent), // not supported yet
+    	msie: /msie/.test(userAgent) && !/opera/.test(userAgent), // watch out for IE -- no support with baseJS
     	mozilla: /mozilla/.test(userAgent) && !/(compatible|webkit)/.test(userAgent),
         msafari: /apple.*mobile.*safari/.test(userAgent)
     },
@@ -88,7 +90,8 @@ var base = {
         e.preventDefault();
         e.stopPropagation();
     },
-    selectors: false
+    selectors: false,
+    sizzleSrc: 'js/sizzle.min.js'
 };
 
 base.extend(Array.prototype, NodeList.prototype, {
@@ -293,13 +296,6 @@ base.extend(Ajax.Response.prototype, {
     		break;
     		case 'json':
     			return this.evalJSON();
-    		break;
-    		case 'object':
-    		    try {
-        			return eval('('+this.response.responseText+')');
-    		    } catch(e) {
-    		        throw new SyntaxError('Returned object is invalid.');
-    		    }
     		break;
     		case 'text':
     		    return this.response.responseText;
@@ -514,30 +510,22 @@ base.extend(document, {
     } else {
         // note that at this time, Sizzle is not Internet Explorer compatible
         console.warn('Selectors API not available. Falling back on Sizzle query selector.');
-        new Ajax.Request('../source/sizzle.min.js', {
-            method: 'get',
-            format: 'text',
-            onSuccess: function(o) {
-                o += 'window.$ = Sizzle';
-                eval(o); // FF2,FF3 < 10ms
-                // $(selector) is now available
-                if(
-                    base.browser.webkit && 
-                    parseInt(base.browser.version) < 525
-                ) {
-                    console.info('DOMContentLoaded not available. Falling back on document.readyState.')
-                    timer = window.setInterval(function() {
-                        if(/loaded|complete/.test(document.readyState)) {
-                            fireContentLoaded();
-                        }
-                    }, 0);
-                } else {
-                    document.addEventListener('DOMContentLoaded', fireContentLoaded, false); 
-                }
-            },
-            onFailure: function(o) {
-                console.error('Horrible failure getting Sizzle. That sucks.')
+        
+        var sizzle = new Element('script', { type: 'text/javascript', src: base.sizzleSrc });
+        sizzle.onload = function() {
+            window.$ = Sizzle;
+            if(base.browser.webkit && parseInt(base.browser.version) < 525) {
+                console.info('DOMContentLoaded not available. Falling back on document.readyState.')
+                timer = window.setInterval(function() {
+                    if(/loaded|complete/.test(document.readyState)) { fireContentLoaded(); }
+                }, 0);
+            } else {
+                document.addEventListener('DOMContentLoaded', fireContentLoaded, false); 
             }
-        });
+        };
+        sizzle.onerror = function() {
+            console.error('Horrible failure getting Sizzle. That sucks.');
+        };
+        document.getElementsByTagName('head')[0].appendChild(sizzle);
     }
 })();

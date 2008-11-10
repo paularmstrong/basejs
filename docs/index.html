@@ -56,16 +56,28 @@
         <p>An easy method for applying a set of properties, methods, variables onto an object or multiple objects. The last argument is always the object that will be applied to the previous arguments.</p>
         
         <table>
-            <tr>
-                <th>destination(s)</th>
-                <td>object</td>
-                <td>Objects that will be extended with properties</td>
-            </tr><tr>
-                <th>properties</th>
-                <td>object</td>
-                <td>Object to extend onto the destination(s)</td>
-            </tr>
-        </table>
+			<thead>
+				<tr>
+					<th scope="col">Parameter</th>
+					<th scope="col">Type</th>
+					<th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">destination(s)</th>
+                    <td>object</td>
+                    <td>Objects that will be extended with properties</td>
+                    <td>&times;</td>
+                </tr><tr>
+                    <th scope="row">properties</th>
+                    <td>object</td>
+                    <td>Object to extend onto the destination(s)</td>
+                    <td>&times;</td>
+                </tr>
+        	</tbody>
+		</table>
         
         <h5>Examples</h5>
         <pre class="sh_javascript"><code>var myObject = function(a) { return a*2; }
@@ -95,12 +107,23 @@ base.browser.msafari // true. Boolean browser is Mobile Safari (iPhone and iPod 
         <p>Check if an object is an Array. JavaScript does not have any default method for doing this.</p>
 
         <table>
-            <tr>
-                <th>object</th>
-                <td>object</td>
-                <td>Object to check.</td>
-            </tr>
-        </table>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">object</th>
+                    <td>object</td>
+                    <td>Object to check.</td>
+                    <td>&times;</td>
+                </tr>
+        	</tbody>
+		</table>
         
         <h5>Example</h5>
     
@@ -115,12 +138,23 @@ base.isArray(myArr); // returns true</code></p></pre>
         <p>Convert an associative object to a query string for passing as parameters to POST or GET calls.</p>
 
         <table>
-            <tr>
-                <th>object</th>
-                <td>object</td>
-                <td>Object to transcribe into a query string.</td>
-            </tr>
-        </table>
+			<thead>
+				<tr>
+					<th scope="col">Parameter</th>
+					<th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">object</th>
+                    <td>object</td>
+                    <td>Object to transcribe into a query string.</td>
+                    <td>&times;</td>
+                </tr>
+        	</tbody>
+		</table>
         
         <h5>Example</h5>
         
@@ -132,12 +166,23 @@ base.toQueryString(person); // "first_name=Paul&amp;last_name=Armstrong"</code><
         <p>Shortcut to preventDefault and stopPropagation on events.</p>
         
         <table>
-            <tr>
-                <th>event</th>
-                <td>Event</td>
-                <td>Event to stop</td>
-            </tr>
-        </table>
+			<thead>
+				<tr>
+					<th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">event</th>
+                    <td>Event</td>
+                    <td>Event to stop</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
+		</table>
 
         <h5>Example</h5>
         
@@ -162,22 +207,34 @@ base.toQueryString(person); // "first_name=Paul&amp;last_name=Armstrong"</code><
         <p>Iterate a function over each index inside the Array.</p>
         
         <table>
-            <tr>
-                <th>iterator</th>
-                <td>function</td>
-                <td>Function to run on each object key</td>
-            </tr>
-            <tr>
-                <th>context</th>
-                <td>object</td>
-                <td>Scope override (optional)</td>
-            </tr>
-        </table>
+			<thead>
+				<tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">iterator</th>
+                    <td>function</td>
+                    <td>Function to run on each object key</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">context</th>
+                    <td>object</td>
+                    <td>Scope override</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
+		</table>
 
         <h5>Examples</h5>
         
-        <pre class="sh_javascript"><p><code>var team = ['Paul', 'Zach', 'Jesse'];<br />
-var awesome = function(person) { alert(person); };<br />
+        <pre class="sh_javascript"><p><code>var team = ['Paul', 'Zach', 'Jesse'];
+var awesome = function(person) { alert(person); };
 team.each(awesome); // alerts &rarr; 'Paul' then 'Zach' then 'Jesse'</code></p></pre>
         
         <pre class="sh_javascript"><p><code>var team = ['Paul', 'Zach', 'Jesse'];
@@ -189,31 +246,46 @@ team.each(awesome, team); // applies team.Paul, team.Zach and team.Jesse as true
         <p>Same method as <a href="#eachfx">each()</a>, but applies waits over the interval (in milliseconds) to apply to each item in the Array. This is a regular interval method and will prevent your scripts from continuing until it has completed.</p>
         
         <table>
-            <tr>
-                <th>iterator</th>
-                <td>function</td>
-                <td>Function to run on each object key</td>
-            </tr>
-            <tr>
-                <th>interval</th>
-                <td>Number</td>
-                <td>Number of milliseconds before each iteration is run (default 1000)</td>
-            </tr>
-            <tr>
-                <th>dir</th>
-                <td>Number</td>
-                <td>-1, 1 or null. Negative gives reverse iteration. (optional)</td>
-            </tr>
-            <tr>
-                <th>context</th>
-                <td>object</td>
-                <td>Scope override (optional)</td>
-            </tr>
-            <tr>
-                <th>callback</th>
-                <td>function</td>
-                <td>Function to fire after each item has been iterated. (optional)</td>
-            </tr>
+			<thead>
+				<tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">iterator</th>
+                    <td>function</td>
+                    <td>Function to run on each object key</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">interval</th>
+                    <td>Number</td>
+                    <td>Number of milliseconds before each iteration is run (default 1000)</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">dir</th>
+                    <td>Number</td>
+                    <td>-1, 1 or null. Negative gives reverse iteration. Defaults to 1.</td>
+                    <td>&radic;</td>
+                </tr>
+                <tr>
+                    <th scope="row">context</th>
+                    <td>object</td>
+                    <td>Scope override. Defaults to none.</td>
+                    <td>&radic;</td>
+                </tr>
+                <tr>
+                    <th scope="row">callback</th>
+                    <td>function</td>
+                    <td>Function to fire after each item has been iterated. Defaults to empty function.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
@@ -234,16 +306,28 @@ team.each(awesome, team); // applies team.Paul, team.Zach and team.Jesse as true
         <p>This method allows you a shorthand for firing custom events from the <var>document</var> object. If you include a <var>memo</var> object when firing the event, it can be recalled by using the event input variable, such as <var>event.memo</var>.</p>
 
         <table>
-            <tr>
-                <th>eventName</th>
-                <td>string</td>
-                <td>Name of the event</td>
-            </tr>
-            <tr>
-                <th>memo</th>
-                <td>object</td>
-                <td>Memo parameters for the event (optional)</td>
-            </tr>
+			<thead>
+				<tr>
+					<th scope="col">Parameter</th>
+					<th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">eventName</th>
+                    <td>string</td>
+                    <td>Name of the event</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">memo</th>
+                    <td>object</td>
+                    <td>Memo parameters for the event. Defaults empty object.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
         </table>
 
         <h5>Examples</h5>
@@ -259,7 +343,7 @@ document.fire('myEvent');</code></p></pre>
 
         <h4 id="dom:loaded">dom:loaded event</h4>
         
-        <p>An custom event has been included in baseJS that is fired on the <var>document</var> object called <code>dom:loaded</code>. This can be useful when you need to perform DOM manipulation before the page is rendered or you want to add event listeners prior to the user being able to interact with the page.</p>
+        <p>A custom event has been included in baseJS that is fired on the <var>document</var> object called <code>dom:loaded</code>. This can be useful when you need to perform DOM manipulation before the page is rendered or you want to add event listeners prior to the user being able to interact with the page.</p>
         
         <h5>Examples</h5>
         
@@ -285,22 +369,35 @@ document.addEventListener('dom:loaded', myPreRenderFxn, true);</code></p></pre>
         <p>A helper method for quickly creating new HTMLElements with attributes.</p>
 
         <table>
-            <tr>
-                <th>type</th>
-                <td>string</td>
-                <td>The type of element to create.</td>
-            </tr>
-            <tr>
-                <th>atts</th>
-                <td>object</td>
-                <td>Attributes to attached to the HTMLElement. (optional)</td>
-            </tr>
-            <tr>
-                <th>content</th>
-                <td>string</td>
-                <td>Set the innerHTML of the element. (optional)</td>
-            </tr>
-        </table>
+			<thead>
+				<tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">type</th>
+                    <td>string</td>
+                    <td>The type of element to create.</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">atts</th>
+                    <td>object</td>
+                    <td>Attributes to attached to the HTMLElement. Defaults to empty object.</td>
+                    <td>&radic;</td>
+                </tr>
+                <tr>
+                    <th scope="row">content</th>
+                    <td>string</td>
+                    <td>Set the innerHTML of the element. Defaults to empty string.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
+		</table>
 
         <h5>Examples</h5>
 
@@ -313,9 +410,7 @@ document.addEventListener('dom:loaded', myPreRenderFxn, true);</code></p></pre>
     <div>
         <!-- FUNCTION -->
         <h2 id="Function">Function.prototype</h2>
-    
-        <p>A couple additional useful methods for Functions.</p>
-    
+        
         <h3>Available Methods and Properties</h3>
     
         <ul class="methods">
@@ -328,17 +423,29 @@ document.addEventListener('dom:loaded', myPreRenderFxn, true);</code></p></pre>
         <p>Override the execution scope of a function with <var>object</var> and optionally prepend arguments to the input.</p>
         
         <table>
-            <tr>
-                <th>oScope</th>
-                <td>object</td>
-                <td>Object to override the scope of the function.</td>
-            </tr>
-            <tr>
-                <th>arguments</th>
-                <td>*</td>
-                <td>Any additional arguments to pass.</td>
-            </tr>
-        </table>
+			<thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">oScope</th>
+                    <td>object</td>
+                    <td>Object to override the scope of the function.</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">arguments</th>
+                    <td>*</td>
+                    <td>Any additional arguments to pass.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
+		</table>
     
         <h5>Examples</h5>
     
@@ -366,16 +473,28 @@ var a = new example();</code></p></pre>
     <p><a href="#bind">Binding method</a> specific for Event Listener callbacks.</p>
 
     <table>
-        <tr>
-            <th>oScope</th>
-            <td>object</td>
-            <td>Object to override the scope of the function.</td>
-        </tr>
-        <tr>
-            <th>arguments</th>
-            <td>*</td>
-            <td>Any additional arguments to pass.</td>
-        </tr>
+        <thead>
+            <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">oScope</th>
+                <td>object</td>
+                <td>Object to override the scope of the function.</td>
+                <td>&times;</td>
+            </tr>
+            <tr>
+                <th scope="row">arguments</th>
+                <td>*</td>
+                <td>Any additional arguments to pass.</td>
+                <td>&radic;</td>
+            </tr>
+        </tbody>
     </table>
 
     <h5>Examples</h5>
@@ -412,11 +531,22 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
         <p>Add a class to an element if it doesn't already have it.</p>
 
         <table>
-            <tr>
-                <th>className</th>
-                <td>string</td>
-                <td>Name of the class to add.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">className</th>
+                    <td>string</td>
+                    <td>Name of the class to add.</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
         </table>
 
         <h5>Examples</h5>
@@ -428,11 +558,22 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
         <p>Check if element has a given class name</p>
 
         <table>
-            <tr>
-                <th>className</th>
-                <td>string</td>
-                <td>Name of the class to test against.</td>
-            </tr>
+			<thead>
+				<tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">className</th>
+                    <td>string</td>
+                    <td>Name of the class to test against.</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
         </table>
 
         <h5>Examples</h5>
@@ -444,11 +585,22 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
         <p>Safely remove a <var>className</var> from the HTMLElement by checking surrounding whitespace and/or the beginning and end of the class attribute. Uses the <code>hasClass()</code> method.</p>
 
         <table>
-            <tr>
-                <th>className</th>
-                <td>string</td>
-                <td>Name of the class to remove.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">className</th>
+                    <td>string</td>
+                    <td>Name of the class to remove.</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
         </table>
 
         <h5>Examples</h5>
@@ -460,11 +612,22 @@ document.body.addEventListener('click', handler.bindAsEventListener(obj));
         <p>If the HTMLElement has the specified <var>className</var>, remove it, otherwise add it.</p>
 
         <table>
-            <tr>
-                <th>className</th>
-                <td>string</td>
-                <td>Name of the class to remove.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">className</th>
+                    <td>string</td>
+                    <td>Name of the class to remove.</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
         </table>
 
         <h5>Examples</h5>
@@ -490,16 +653,28 @@ alert(nav.getXY().y); // alerts &rarr; yPosition</code></p></pre>
         <p>This method allows you a shorthand for firing custom events from any <var>HTMLElement</var> object. If you include a <var>memo</var> object when firing the event, it can be recalled by using the event input variable, such as <var>event.memo</var>.</p>
 
         <table>
-            <tr>
-                <th>eventName</th>
-                <td>string</td>
-                <td>Name of the event</td>
-            </tr>
-            <tr>
-                <th>memo</th>
-                <td>object</td>
-                <td>Memo parameters for the event (optional)</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">eventName</th>
+                    <td>string</td>
+                    <td>Name of the event</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">memo</th>
+                    <td>object</td>
+                    <td>Memo parameters for the event. Defaults to empty object.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
         </table>
 
         <h5>Examples</h5>
@@ -564,12 +739,23 @@ header.appendChild(newHTML.toHTML()[0]); // Append the entire node structure, st
         <p>Trim any trailing whitespace from a string or optionally provide a string/regular expression selector to match against and remove from the input string.</p>
         
         <table>
-            <tr>
-                <th>match</th>
-                <td>string</td>
-                <td>Regular Expression string to trim. (optional)</td>
-            </tr>
-        </table>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">match</th>
+                    <td>string</td>
+                    <td>Regular Expression string to trim. Defaults to trailing whitespace.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
+		</table>
         
         <h5>Examples</h5>
         
@@ -591,8 +777,8 @@ daveString.trim(/\sDave/g); // returns &rarr; 'Remove all instances of. After th
         <h3>Available Methods and Properties</h3>
         
         <ul class="methods">
-            <li><a href="#newtemplate">template(string)</a></li>
-            <li><a href="#parse">parse(object)</a></li>
+            <li><a href="#newtemplate">template()</a></li>
+            <li><a href="#parse">parse()</a></li>
         </ul>
         
         <h4 id="newtemplate">new Template(string)</h4>
@@ -600,11 +786,22 @@ daveString.trim(/\sDave/g); // returns &rarr; 'Remove all instances of. After th
         <p>Create a template. Replaceable keys use <kbd>#{key}</kbd> syntax within the string.</p>
         
         <table>
-            <tr>
-                <th>template</th>
-                <td>string</td>
-                <td>The markup that will be used for the template.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">template</th>
+                    <td>string</td>
+                    <td>The markup that will be used for the template.</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
         </table>
         
         <h5>Examples</h5>
@@ -616,11 +813,22 @@ daveString.trim(/\sDave/g); // returns &rarr; 'Remove all instances of. After th
         <p>Parse the data object into the template, replacing #{key} with key values.</p>
         
         <table>
-            <tr>
-                <th>object</th>
-                <td>object</td>
-                <td>Key/value pairs to parse into the template object.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">object</th>
+                    <td>object</td>
+                    <td>Key/value pairs to parse into the template object.</td>
+                    <td>&times;</td>
+                </tr>
+            </tbody>
         </table>
         
         <h5>Examples</h5>
@@ -653,16 +861,28 @@ myTemplate.parse(person2); // returns &rarr; 'Janey is 23 years old.'</code></p>
         <p>Use CSS selectors to get an Array or NodeList of elements in the document or context, if provided.</p>
         
         <table>
-            <tr>
-                <th>selector</th>
-                <td>string</td>
-                <td>CSS query of selectors.</td>
-            </tr>
-            <tr>
-                <th>context</th>
-                <td>HTMLElement</td>
-                <td>Context for the query. Limits scope of query.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">selector</th>
+                    <td>string</td>
+                    <td>CSS query of selectors.</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th scope="row">context</th>
+                    <td>HTMLElement</td>
+                    <td>Context for the query. Limits scope of query.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
         </table>
         
         <h5>Examples</h5>
