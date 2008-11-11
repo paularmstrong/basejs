@@ -105,7 +105,9 @@ base.extend(Array.prototype, NodeList.prototype, {
         try {
             var c = this.length, i = 0;
             while(i<c) { 
-                iterator(this[i]); i++ 
+                // make sure it's not a function!
+                if(typeof this[i] !== 'function') { iterator(this[i]);}
+                i++;
             }
         } catch(e) { throw e; }
         return this;
@@ -135,7 +137,8 @@ base.extend(Array.prototype, NodeList.prototype, {
                     clearInterval(eachIterator);
                     return this;
                 } else {
-                    iterator(this[i]);
+                    // make sure it's not a function!
+                    if(typeof this[i] !== 'function') { iterator(this[i]); }
                     i = i+dir;
                 }
             }.bind(this), (interval || 1000));
@@ -168,7 +171,26 @@ base.extend(Function.prototype, {
     }
 });
 
-var Ajax = function(options) {
+/**
+ * io makes a new io object request
+ * @param url           {string}        location to access
+ * @param options       {object}        (optional)
+ *      @param method           {string}        post or get form method
+ *      @param asynchronous     {boolean}       Only true supported at this time.
+ *      @param contentType      {string}        Content mime type to send.
+ *      @param encoding         {string}        Content encoding.
+ *      @param params           {object}        Object of header parameters to send with the request.
+ *      @param format           {string}        Response type assumption: 'text', 'json', 'object', 'xml'
+ *      @param sanitizeJSON     {boolean}       Whether the JSON needs to be sanitized.
+ *      @param onUninitialized  {function}      Ready state callback.
+ *      @param onConnected      {function}      Ready state callback.
+ *      @param onRequested      {function}      Ready state callback.
+ *      @param onProcessing     {function}      Ready state callback.
+ *      @param onComplete       {function}      Ready state callback. Includes response object.
+ *      @param onFailure        {function}      Ready state callback. Includes response object. (recommended)
+ *      @param onSuccess        {function}      Ready state callback. Includes response object. (recommended)
+ */
+var io = function(url, options) {
     this.options = {
         method: 'post', 
         asynchronous: true,
@@ -182,143 +204,92 @@ var Ajax = function(options) {
     base.extend(this.options, options || {});
     this.options.method = this.options.method.toLowerCase();
     
-    return this.options;
+    this.xhr = new XMLHttpRequest();
+
+    if(this.options.method.toLowerCase() == 'get') {
+        url += (url.indexOf('?') >= 0) ? '&' : '?' + params;
+    }
+    try {
+        this.xhr.open(this.options.method, url, this.options.asynchronous);
+
+        this.xhr.onreadystatechange = this._onStateChange.bind(this);
+        // set the request headers
+        var headers = {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': '*/*'
+        };
+        if(this.options.method == 'post') {
+            headers['Content-type'] = this.options.contentType+(this.options.encoding ? '; charset='+this.options.encoding : '');
+        }
+        for(var name in headers) {
+            this.xhr.setRequestHeader(name, headers[name]);
+        }
+        
+        // convert the params
+        var params = base.toQueryString(this.options.params);
+
+        this._body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
+        this.xhr.send(this._body);
+    } catch(e) {
+        console.error('request error', e);
+    }
 };
-base.extend(Ajax, {
+base.extend(io, {
     /**
-     * Ajax.Request makes a new XHR object request
-     * @param url           {string}        location to access
-     * @param options       {object}        (optional)
-     *      @param method           {string}        post or get form method
-     *      @param asynchronous     {boolean}       Only true supported at this time.
-     *      @param contentType      {string}        Content mime type to send.
-     *      @param encoding         {string}        Content encoding.
-     *      @param params           {object}        Object of header parameters to send with the request.
-     *      @param format           {object}        Response type assumption: 'text', 'json', 'object', 'xml'
-     *      @param sanitizeJSON     {boolean}       Whether the JSON needs to be sanitized.
-     *      @param onUninitialized  {function}      Ready state callback.
-     *      @param onConnected      {function}      Ready state callback.
-     *      @param onRequested      {function}      Ready state callback.
-     *      @param onProcessing     {function}      Ready state callback.
-     *      @param onComplete       {function}      Ready state callback. Includes response object.
-     *      @param onFailure        {function}      Ready state callback. Includes response object. (recommended)
-     *      @param onSuccess        {function}      Ready state callback. Includes response object. (recommended)
-     */
-    Request: function(url, options) {
-        this.options = new Ajax(options);
-        this.url = url;
-
-        this.transport = new XMLHttpRequest();
-
-        if(this.options.method.toLowerCase() == 'get') {
-            this.url += (this.url.indexOf('?') >= 0) ? '&' : '?' + params;
-        }
-
-        try {
-            this.transport.open(this.options.method, url, this.options.asynchronous);
-
-            this.transport.onreadystatechange = this._onStateChange.bind(this);
-            this._setRequestHeaders();
-
-            var params = base.toQueryString(this.options.params);
-
-            this._body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
-            this.transport.send(this._body);
-        } catch(e) {
-            console.error('request error', e)
-        }
-    },
-    /**
-     * Ajax.Response filters through an Ajax.Request response object to give most concise information possible.
+     * io.response filters through an io response object to give most concise information possible.
      * @param response      {object}        The XMLHttpRequest object.
      * @param format        {string}        Type to respond with: 'text', 'json', 'object', 'xml'
      * @param sanitize      {boolean}       Whether the JSON needs to be sanitized.
      */
-    Response: function(response, format, sanitize) {
-    	this.response = response;
-    	this.format = format;
-    	this.sanitizeJSON = sanitize;
-    }
-});
-
-base.extend(Ajax.Request, {
-    Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
-});
-base.extend(Ajax.Request.prototype, {
-    _onStateChange: function() {
-        var readyState = this.transport.readyState;
-        if (readyState > 1 && !((readyState == 4) && this._complete)) {
-            this._respondToReadyState(this.transport.readyState);
-        }
-    },
-    _respondToReadyState: function(state) {
-        this._complete = (state === 4) ? true : false;
-
-    	if(this._complete) {
-        	var res = (new Ajax.Response(this.transport, this.options.format, this.options.sanitizeJSON)).getResponse();
-
-        	// if complete, check for onFailure or onSuccess and fire function if available
-            if(this.options.onFailure || this.options.onSuccess) {
-                (this.options['on'+Ajax.Request.Events[this._getSuccessCode()]] || function() {} )(res);
-            }
-
-        	// if onEvent function is available for this state
-        	(this.options['on'+Ajax.Request.Events[state]] || function() {})(res);
-    	} else {
-    		(this.options['on'+Ajax.Request.Events[state]] || function() {})();
-    	}
-    },
-    _getSuccessCode: function() {
-        var successCode = (!this.transport.status) ? 5 : (this.transport.status >= 200 && this.transport.status < 300) ? 6 : 5;
-        return successCode;
-    },
-    _setRequestHeaders: function() {
-        var headers = {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
-        };
-
-        if(this.options.method == 'post') {
-            headers['Content-type'] = this.options.contentType+(this.options.encoding ? '; charset='+this.options.encoding : '');
-        }
-
-        for(var name in headers) {
-            this.transport.setRequestHeader(name, headers[name]);
-        }
-    }
-});
-base.extend(Ajax.Response.prototype, {
-    getResponse: function() {
-    	switch(this.format.toLowerCase()) {
+    response: function(response, format, sanitize) {
+    	switch(format.toLowerCase()) {
     		case 'xml':
-    		    var xml = (this.response.responseXML) ? this.response.responseXML : new String('');
+    		    var xml = (response.responseXML) ? response.responseXML : new String('');
     			return xml;
     		break;
     		case 'json':
-    			return this.evalJSON();
+        	    var json = response.responseText;
+        	    if(sanitize) { json = json.sub(/^\/\*-secure-([\s\S]*)\*\/\s*$/, '#{1}'); }
+                
+        	    try {
+                	var str = response.responseText.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');
+        	    	if((/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(str)) {
+        	    		return eval('('+json+')');
+        	    	}
+        	    } catch(e) {
+        	    	console.error('json eval error', e);
+        	    }
     		break;
     		case 'text':
-    		    return this.response.responseText;
+    		    return response.responseText;
     		break;
     		default:
-    		    return this.response;
+    		    return response;
     		break;
     	}
-    },
-    isJSON: function() {
-    	str = this.response.responseText.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');
-    	return (/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(str);
-    },
-    evalJSON: function() {
-    	var json = this.response.responseText;
-    	if(this.sanitizeJSON) { json = json.sub(/^\/\*-secure-([\s\S]*)\*\/\s*$/, '#{1}'); }
+    }
+});
 
-    	try {
-    		if(this.isJSON(json)) {
-    			return eval('('+json+')');
-    		}
-    	} catch(e) {
-    		console.error('json eval error', e);
+base.extend(io, {
+    Events: ['Uninitialized', 'Connected', 'Requested', 'Processing', 'Complete', 'Failure', 'Success']
+});
+base.extend(io.prototype, {
+    _onStateChange: function() {
+        var readyState = this.xhr.readyState;
+        if(readyState === 4) {
+    	    this._complete = true;
+        	var res = new io.response(this.xhr, this.options.format, this.options.sanitizeJSON);
+
+        	// if complete, check for onFailure or onSuccess and fire function if available
+            if(this.options.onFailure || this.options.onSuccess) {
+                var successCode = (!this.xhr.status) ? 5 : (this.xhr.status >= 200 && this.xhr.status < 300) ? 6 : 5;
+                (this.options['on'+io.Events[successCode]] || function() {})(res);
+            }
+
+        	// if onEvent function is available for this state
+        	(this.options['on'+io.Events[readyState]] || function() {})(res);
+    	} else if(readyState > 1 && !((readyState == 4) && this._complete)) {
+    		(this.options['on'+io.Events[readyState]] || function() {})();
     	}
     }
 });
