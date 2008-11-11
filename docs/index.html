@@ -412,148 +412,6 @@ document.addEventListener('dom:loaded', myPreRenderFxn, true);</code></p></pre>
     <hr />
     
     <div>
-        <!-- IO -->
-        <h2 id="io">io</h2>
-        
-        <p>io is a set of methods for XHR/AJAX functions.</p>
-        
-        <h3>Available Methods and Properties</h3>
-        
-        <ul class="methods">
-            <li><a href="#io-function">io()</a></li>
-        </ul>
-        
-        <h4 id="io-function">io(url[, options])</h4>
-        
-        <p>Create a new XHR object request.</p>
-        
-        <table>
-			<thead>
-                <tr>
-                    <th scope="col">Parameter</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Description</th>
-					<th scope="col">Optional</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>url</th>
-                    <td>string</td>
-                    <td>Location to query through XHR.</td>
-                    <td>&times;</td>
-                </tr>
-                <tr>
-                    <th>options</th>
-                    <td>object</td>
-                    <td>Override settings for making the XHR request.</td>
-                    <td>&radic;</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <table>
-            <caption>Optional keys for the options attribute.</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Parameter</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Optional</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>method</th>
-                    <td>string</td>
-                    <td>post or get form method</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>asynchronous</th>
-                    <td>boolean</td>
-                    <td>Only true supported at this time.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>contentType</th>
-                    <td>string</td>
-                    <td>Content mime type to send.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>encoding</th>
-                    <td>string</td>
-                    <td>Content encoding.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>params</th>
-                    <td>object</td>
-                    <td>Object of header parameters to send with the request.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>format</th>
-                    <td>string</td>
-                    <td>Response type assumption: 'text', 'json', 'object', 'xml'</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>sanitizeJSON</th>
-                    <td>boolean</td>
-                    <td>Whether the JSON needs to be sanitized.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onUninitialized</th>
-                    <td>function</td>
-                    <td>Ready state callback.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onConnected</th>
-                    <td>function</td>
-                    <td>Ready state callback.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onRequested</th>
-                    <td>function</td>
-                    <td>Ready state callback.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onProcessing</th>
-                    <td>function</td>
-                    <td>Ready state callback.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onComplete</th>
-                    <td>function</td>
-                    <td>Ready state callback. Includes response object.</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onFailure</th>
-                    <td>function</td>
-                    <td>Ready state callback. Includes response object. (recommended)</td>
-                    <td>&radic;</td>
-                </tr><tr>
-                    <th>onSuccess</th>
-                    <td>function</td>
-                    <td>Ready state callback. Includes response object. (recommended)</td>
-                    <td>&radic;</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <h5>Examples</h5>
-
-        <pre class="sh_javascript"><p><code>new io('/test/results.json', {
-    format: 'json', 
-    onSuccess: function(o) { 
-        alert(o);
-    }, 
-    onFailure: function() { 
-        alert('There was an error getting the data');
-    }
-});</code></p></pre>
-    </div>
-
-
-    <hr />
-    
-    <div>
         <!-- FUNCTION -->
         <h2 id="Function">Function.prototype</h2>
         
@@ -839,6 +697,147 @@ myElement.fire('myHtmlEvent');</code></p></pre>
     </div>
 
     <hr />
+
+    <div>
+        <!-- IO -->
+        <h2 id="io">io</h2>
+
+        <p>io is a set of methods for XHR/AJAX functions.</p>
+
+        <h3>Available Methods and Properties</h3>
+
+        <ul class="methods">
+            <li><a href="#io-function">io()</a></li>
+        </ul>
+
+        <h4 id="io-function">io(url[, options])</h4>
+
+        <p>Create a new XHR object request.</p>
+
+        <table>
+			<thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+					<th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>url</th>
+                    <td>string</td>
+                    <td>Location to query through XHR.</td>
+                    <td>&times;</td>
+                </tr>
+                <tr>
+                    <th>options</th>
+                    <td>object</td>
+                    <td>Override settings for making the XHR request.</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <caption>Optional keys for the options attribute.</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Optional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>method</th>
+                    <td>string</td>
+                    <td>post or get form method</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>asynchronous</th>
+                    <td>boolean</td>
+                    <td>Only true supported at this time.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>contentType</th>
+                    <td>string</td>
+                    <td>Content mime type to send.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>encoding</th>
+                    <td>string</td>
+                    <td>Content encoding.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>params</th>
+                    <td>object</td>
+                    <td>Object of header parameters to send with the request.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>format</th>
+                    <td>string</td>
+                    <td>Response type assumption: 'text', 'json', 'object', 'xml'</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>sanitizeJSON</th>
+                    <td>boolean</td>
+                    <td>Whether the JSON needs to be sanitized.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onUninitialized</th>
+                    <td>function</td>
+                    <td>Ready state callback.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onConnected</th>
+                    <td>function</td>
+                    <td>Ready state callback.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onRequested</th>
+                    <td>function</td>
+                    <td>Ready state callback.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onProcessing</th>
+                    <td>function</td>
+                    <td>Ready state callback.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onComplete</th>
+                    <td>function</td>
+                    <td>Ready state callback. Includes response object.</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onFailure</th>
+                    <td>function</td>
+                    <td>Ready state callback. Includes response object. (recommended)</td>
+                    <td>&radic;</td>
+                </tr><tr>
+                    <th>onSuccess</th>
+                    <td>function</td>
+                    <td>Ready state callback. Includes response object. (recommended)</td>
+                    <td>&radic;</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>Examples</h5>
+
+        <pre class="sh_javascript"><p><code>new io('/test/results.json', {
+    format: 'json', 
+    onSuccess: function(o) { 
+        alert(o);
+    }, 
+    onFailure: function() { 
+        alert('There was an error getting the data');
+    }
+});</code></p></pre>
+    </div>
+
+        <hr />
 
     <div>
         <h2 id="String">String.prototype</h2>
