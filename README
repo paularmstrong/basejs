@@ -5,3 +5,14 @@ README
 baseJS is a lightweight Javascript framework intended for use with Mobile Safari on the iPhone and iPod Touch; it also works with Firefox and all WebKit-based browsers. By providing shortcuts and reusable methods, baseJS helps you write code to be lightweight and extendable--perfect for the mobile web.
 
 Support for Internet Explorer is NOT included in order to keep the file size as low as possible for mobile browsing.
+
+Please see http://paularmstrongdesigns.com/projects/basejs for more information on this project.
+
+WHAT baseJS IS:
+• A lightweight Javascript framework that includes helpful methods for creating dynamic web sites.
+
+WHAT baseJS IS NOT:
+• A cross-browser, cross-platform framework for creating accessible web sites.
+• Useable with Internet Explorer.
+• Intended to support Internet Explorer.
+• Seriously, there will never be Internet Explorer support.
