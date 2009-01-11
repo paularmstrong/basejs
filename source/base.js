@@ -91,7 +91,7 @@ var base = {
         e.stopPropagation();
     },
     selectors: false,
-    sizzleSrc: 'js/sizzle.min.js'
+    sizzleSrc: '../sizzle/sizzle.js'
 };
 
 base.extend(Array.prototype, NodeList.prototype, {
