@@ -6,7 +6,7 @@ baseJS is a lightweight Javascript framework intended for use with Mobile Safari
 
 Support for Internet Explorer is NOT included in order to keep the file size as low as possible for mobile browsing.
 
-Please run the following two commands go make sure you get the source for Sizzle:
+Please run the following two commands to make sure you get the source for Sizzle:
 $ git submodule init
 $ git submodule update
 
