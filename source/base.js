@@ -54,7 +54,7 @@ var base = {
      * @param object    {object}    Object to check.
      */
     isArray: function(object) {
-        return (object != null && typeof object == "object" && 'splice' in object && 'join' in object);
+        return Object.prototype.toString.call(object) === '[object Array]';
     },
     /**
      * Generate a URL-safe query string from the object.
