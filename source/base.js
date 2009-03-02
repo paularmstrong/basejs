@@ -82,14 +82,6 @@ var base = {
      
         element.dispatchEvent(event);
     },
-    /**
-     * Shortcut to preventDefault and stopPropagation on events.
-     * @param e   {Event}     Event to stop
-     */
-    stopEvent: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    },
     selectors: false,
     sizzleSrc: '../sizzle/sizzle.js'
 };
@@ -363,6 +355,16 @@ base.extend(String.prototype, {
     trim: function(match) {
         var re = new RegExp(match) || new RegExp(/\s+?/);
         return this.replace(re, '');
+    }
+});
+
+base.extend(Event.prototype, {
+    /**
+     * Shortcut to preventDefault and stopPropagation on events.
+     */
+    stop: function() {
+        this.preventDefault();
+        this.stopPropagation();
     }
 });
 
