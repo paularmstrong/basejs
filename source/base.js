@@ -197,10 +197,13 @@ var io = function(url, options) {
     this.options.method = this.options.method.toLowerCase();
     
     this.xhr = new XMLHttpRequest();
-
+    
+    // convert the params
+    var params = base.toQueryString(this.options.params);
     if(this.options.method.toLowerCase() == 'get') {
         url += (url.indexOf('?') >= 0) ? '&' : '?' + params;
     }
+    
     try {
         this.xhr.open(this.options.method, url, this.options.asynchronous);
 
@@ -217,9 +220,6 @@ var io = function(url, options) {
             this.xhr.setRequestHeader(name, headers[name]);
         }
         
-        // convert the params
-        var params = base.toQueryString(this.options.params);
-
         this._body = this.options.method.toLowerCase() == 'post' ? (this.options.postBody || params) : null;
         this.xhr.send(this._body);
     } catch(e) {
