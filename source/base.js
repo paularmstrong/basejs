@@ -82,7 +82,9 @@ var base = {
      
         element.dispatchEvent(event);
     },
+    // Whether or not the Query Selectors API are available set via script
     selectors: false,
+    // Location of sizzle.js relative to your requested document
     sizzleSrc: '../sizzle/sizzle.js'
 };
 
